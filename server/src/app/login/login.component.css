@@ -1,0 +1,8 @@
+.form-wrapper {
+    width: 100%;
+    height: calc(100vh - 64px);
+}
+
+.form-group {
+    margin: 0 0 15px 0;
+}

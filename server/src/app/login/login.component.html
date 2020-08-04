@@ -1,0 +1,39 @@
+<div class="login-component-wrapper" fxLayout="row">
+
+    <div class="form-wrapper container" fxLayout="row" flex fxLayoutAlign="center center">
+        <form novalidate #login="ngForm" autocomplete="off" [formGroup]="loginForm" class="login-form-container" fxLayout="column" (ngSubmit)="onSubmit(login)">
+
+            <div fxLayout="row" class="form-group">
+                <mat-form-field>
+                    <input matInput formControlName="email" placeholder="Enter your email Address" type="text">
+                    <mat-error *ngIf="(email.errors && (email.dirty || email.touched)) && email.errors.email">Enter a valid Email.</mat-error>
+                    <mat-error *ngIf="(email.errors && (email.dirty || email.touched)) && email.errors.required"> Email is required.</mat-error>
+                </mat-form-field>
+            </div>
+
+
+            <div fxLayout="row" class="form-group">
+                <mat-form-field>
+                    <input matInput formControlName="password" placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+                    <mat-error *ngIf="(password.errors && (password.dirty || password.touched)) && password.errors.required"> Password is required.</mat-error>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="35%" class="">
+                <button [disabled]="loginForm.invalid ? 'disabled': null" mat-flat-button color="primary">Login</button>
+
+                <a [routerLink]="['/signup']" routerLinkActive="router-link-active">
+                  Sign up
+                </a>
+            </div>
+
+
+
+
+        </form>
+    </div>
+</div>

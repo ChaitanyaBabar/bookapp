@@ -1,0 +1,17 @@
+<div class="book-list-wrapper" fxLayout="row">
+    <mat-list>
+        <mat-list-item *ngFor="let book of bookList">
+            <img matListAvatar [src]="book.imagePath" alt="Book Image">
+            <h3 matLine> {{book.name}} </h3>
+            <p matLine>
+                <span class="demo-2"> ₹ {{book.price}} </span>
+            </p>
+        </mat-list-item>
+        <mat-list-item *ngIf="noRecordFound">
+            <h3 matLine> Sorry no record found</h3>
+            <p matLine>
+                <span class="demo-2"> N/A </span>
+            </p>
+        </mat-list-item>
+    </mat-list>
+</div>

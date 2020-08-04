@@ -14,12 +14,30 @@ const bookSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    registered: {
+    bookCondition: {
+        type: String,
+        require: true,
+    },
+    publication: {
+        type: String,
+    },
+    standard: {
+        type: String
+    },
+    category: {
+        type: String
+    },
+    author: {
+        type: String
+    },
+    subject: {
+        type: String
+    },
+    addedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Registered',
         require: true
     }
-
 })
 
 module.exports = mongoose.model('Book', bookSchema);

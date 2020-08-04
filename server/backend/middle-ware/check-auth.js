@@ -6,11 +6,12 @@ module.exports = (req, res, next) => {
         const jwtToken = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(jwtToken, jwtsecret);
         req.decodedToken = decoded;
+        req.user = decoded;
         next();
     } catch (err) {
         return res.status(401).json({
-            message: 'Unauthorized',
+            message: err.message,
             error: err
-        })
+        });
     }
 };
