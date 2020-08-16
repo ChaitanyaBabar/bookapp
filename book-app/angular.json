@@ -27,12 +27,7 @@
               }
             ],
             "styles": [
-              {
-                "input": "src/theme/variables.scss"
-              },
-              {
-                "input": "src/global.scss"
-              }
+              "src/styles.scss"            
             ],
             "scripts": []
           },
