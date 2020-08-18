@@ -19,5 +19,7 @@ export class LoginComponent implements OnInit {
       password: [null, Validators.required]
     });
   }
+  onSubmit() {
+  }
 
 }
