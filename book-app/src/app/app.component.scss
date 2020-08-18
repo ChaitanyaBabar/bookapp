@@ -1,0 +1,28 @@
+.application-wrapper{
+    height: 100%;
+    width: 100%;
+}
+.book-main-menu{
+    cursor: pointer;
+
+    a{
+        color: #fff;
+        text-decoration: none;
+    }
+    a:hover,
+    a:active,
+    a:visited{
+        color: #fff;
+    }
+
+
+}
+.book-main-menu-wrapper{
+    position: fixed;
+    width: 100%;
+    top:0;
+}
+.router-wrapper{
+    margin-top: 64px;
+    height: 100%;
+}

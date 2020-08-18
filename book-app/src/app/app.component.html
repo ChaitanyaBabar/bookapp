@@ -1,4 +1,28 @@
-<div>
-  This is Home Page
-  <router-outlet></router-outlet>
+<div class="application-wrapper">
+
+  <div fxLayout="row" class="book-main-menu-wrapper">
+    <mat-toolbar color="primary">
+      <div fxFlex="30">
+        <span>Book Application</span>
+      </div>
+      <div fxFlex="70" fxLayout="row" fxLayoutAlign="end center">
+        <button class="book-main-menu" mat-button aria-label="Welcome">
+          <a [routerLink]="['welcome']">Welcome</a>
+        </button>
+        <button class="book-main-menu" mat-button aria-label="Product List">
+          <a [routerLink]="['product-list']">Product Lists</a>
+        </button>
+        <button class="book-main-menu" mat-button aria-label="User List">
+          <a [routerLink]="['user-list']">User List</a>
+        </button>
+        <button class="book-main-menu" mat-button aria-label="Login">
+          <a [routerLink]="['login']">Login</a>
+        </button>
+      </div> 
+    </mat-toolbar>
+  </div>
+  <div class="router-wrapper">
+    <router-outlet></router-outlet>
+  </div>
 </div>  
+

@@ -14,3 +14,8 @@ body {
 
 
 /* Over Ride the material css*/
+
+button.book-main-menu .mat-button-focus-overlay,
+button.book-main-menu .mat-button-ripple{
+   display: none !important;
+}

@@ -9,25 +9,32 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 
-import { LoginPageModule } from '../app/login/login.module';
-import { MenuPageModule } from '../app/menu/menu.module';
 
 import { MaterialModule } from '../app/material/material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+import { LoginComponent } from './login/login.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    WelcomeComponent,
+    PageNotFoundComponent
+  ],
   entryComponents: [],
   imports: [
      BrowserModule,
+     ReactiveFormsModule,
      MaterialModule,
-
-     LoginPageModule,
-     MenuPageModule,
+     FlexLayoutModule,
 
      AppRoutingModule,
-   
      AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [],
