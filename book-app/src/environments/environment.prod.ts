@@ -10,4 +10,5 @@ export const environment = {
     appId: '1:249538888517:web:de51d2d8f8cbdf7817742c',
     measurementId: 'G-2JZC8F8YJM'
   },
+  baseUrl: 'http://localhost:3001'
 };
