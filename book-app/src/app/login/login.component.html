@@ -1,20 +1,26 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="login-container">
-    <div class="login-content">
-      <mat-toolbar class="login-toolbar" color="primary">Book App</mat-toolbar>
-      <mat-card>
-        <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
-          <mat-form-field>
-            <mat-icon matPrefix>person_outline</mat-icon>
-            <input type="email" autofocus matInput placeholder="Email" formControlName="email">
-          </mat-form-field>
+    
+  <div class="login-content">
+    <mat-card>
+        <mat-card-title class="login-toolbar" color="primary">
+          <mat-toolbar class="login-toolbar" color="primary">Login</mat-toolbar>
+        </mat-card-title>    
 
-          <mat-form-field>
-            <mat-icon matPrefix>lock_outline</mat-icon>
-            <input type="password" autocomplete="false" matInput placeholder="Password" formControlName="password">
-          </mat-form-field>
+        <mat-card-content>        
+            <form novalidate #login="ngForm" [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit(login)">
+              <mat-form-field>
+                <mat-icon matPrefix>person_outline</mat-icon>
+                <input type="email" autofocus matInput placeholder="Email" formControlName="email">
+              </mat-form-field>
 
-          <button [disabled]="!loginForm.valid" type="submit" mat-raised-button color="primary">Login</button>
-        </form>
+              <mat-form-field>
+                <mat-icon matPrefix>lock_outline</mat-icon>
+                <input type="password" autocomplete="false" matInput placeholder="Password" formControlName="password">
+              </mat-form-field>
+
+              <button [disabled]="!loginForm.valid" type="submit" mat-raised-button color="primary">Submit</button>
+          </form>
+        </mat-card-content>
       </mat-card>
     </div>
   </div>

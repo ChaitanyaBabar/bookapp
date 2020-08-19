@@ -23,6 +23,7 @@
     top:0;
 }
 .router-wrapper{
-    margin-top: 64px;
-    height: 100%;
+    position: relative;
+    top: 64px;
+    height: calc(100% - 64px);
 }

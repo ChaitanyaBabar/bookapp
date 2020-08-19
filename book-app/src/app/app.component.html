@@ -9,10 +9,19 @@
         <button class="book-main-menu" mat-button aria-label="Welcome">
           <a [routerLink]="['welcome']">Welcome</a>
         </button>
-        <button class="book-main-menu" mat-button aria-label="Product List">
-          <a [routerLink]="['product-list']">Product Lists</a>
+        <button class="book-main-menu" mat-button aria-label="Books List">
+          <a [routerLink]="['books']">Books Lists</a>
         </button>
-        <button class="book-main-menu" mat-button aria-label="User List">
+        <button class="book-main-menu" mat-button aria-label="Books Detail">
+          <a [routerLink]="['books', 10]">Books Detail</a>
+        </button>
+        <button class="book-main-menu" mat-button aria-label="Books Edit">
+          <a [routerLink]="['books', 10, 'edit']">Books Edit</a>
+        </button>
+        <button class="book-main-menu" mat-button aria-label="Books List">
+          <a [routerLink]="['books', 0, 'edit']">Add Book</a>
+        </button>
+        <button  class="book-main-menu" mat-button aria-label="User List">
           <a [routerLink]="['user-list']">User List</a>
         </button>
         <button class="book-main-menu" mat-button aria-label="Login">

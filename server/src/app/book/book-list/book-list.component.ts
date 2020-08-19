@@ -22,7 +22,7 @@ export class BookListComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line: variable-name
   constructor(private _bookService: BooksService) {
-    this.bookListUrl = 'books/v1/list';
+    this.bookListUrl = 'books/v1/book/all/list';
     this.noRecordFound = false;
   }
 
@@ -34,10 +34,10 @@ export class BookListComponent implements OnInit, OnDestroy {
                       _id: item._id,
                       name: item.name,
                       imagePath: item.imagePath,
-                      registered: {
-                            _id: item.registered._id,
-                            name: item.registered.firstName,
-                            email: item.registered.email
+                      addedBy: {
+                            _id: item.addedBy._id,
+                            name: item.addedBy.firstName,
+                            email: item.addedBy.email
                       },
                       price: item.price,
                       author: item.author,
