@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Book } from '../model/book.model';
+import { Book, IBook } from '../model/book.model';
 import { Observable } from 'rxjs';
 import { EnvironmentUrlService } from './environment-url.service';
 
@@ -20,7 +20,7 @@ export class BooksService {
     return this.http.get<any>(url);
   }
 
-  createBook(book: Book): Observable<any>{
+  createBook(book: IBook): Observable<any>{
     const url = this.baseUrl + '/books/v1/single';
     return this.http.post<any>(url, book);
   }
@@ -30,8 +30,7 @@ export class BooksService {
     return this.http.get<any>(url);
   }
 
-  updateBook(book: Book): Observable<any>{
-    const bookId = book._id;
+  updateBook(book, bookId): Observable<any>{
     const url = this.baseUrl + `/books/v1/book/${bookId}`;
     return this.http.patch<any>(url, book);
   }

@@ -34,6 +34,7 @@ import { UsersService } from './_shared/users.service';
 import { BasicAuthInterceptorService } from './_helpers/basic-auth-interceptor.service';
 import { GlobalErrorHandlerService } from './_helpers/global-error-handler.service';
 import { ServerErrorInterceptorService } from './_helpers/server-error-interceptor.service';
+import { BookDialogComponent } from './book-dialog/book-dialog.component';
 
 
 
@@ -54,7 +55,8 @@ import { ServerErrorInterceptorService } from './_helpers/server-error-intercept
     AppComponent,
     LoginComponent,
     WelcomeComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    BookDialogComponent
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandlerService },

@@ -11,9 +11,13 @@ import { EnvironmentUrlService } from './environment-url.service';
   providedIn: 'root'
 })
 export class AuthenticationService {
+  // tslint:disable-next-line: variable-name
   private currentUserSubject: BehaviorSubject<RegisteredUser>;
+  // tslint:disable-next-line: variable-name
   private currentUserToken: BehaviorSubject<string>;
   public currentUser: Observable<RegisteredUser>;
+
+  public redirectUrl: string;
 
   constructor(private http: HttpClient, private envUrl: EnvironmentUrlService) {
     let user = localStorage.getItem('currentUser') === 'undefined' ? "{}" : localStorage.getItem('currentUser');

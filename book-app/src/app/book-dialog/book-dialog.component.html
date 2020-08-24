@@ -1,0 +1,18 @@
+<div fxLayout="row"  fxLayoutAlign="center center" class="book-dialog-component-wrapper">
+    <div fxLayout="column" class="book-dialog-component">
+        <h2 mat-dialog-title>
+            {{bookDialogData.title}}
+        </h2>
+        <mat-dialog-content class="mat-typography">
+            {{bookDialogData.content}}
+        </mat-dialog-content>
+        <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" >
+            <button mat-raised-button color="accent" [mat-dialog-close]="bookDialogData.secondaryButtonLabel">
+                    {{bookDialogData.secondaryButtonLabel}}
+            </button>
+            <button mat-raised-button color="primary" [mat-dialog-close]="bookDialogData.primaryButtonLabel" cdkFocusInitial>
+                    {{bookDialogData.primaryButtonLabel}}
+            </button>
+        </mat-dialog-actions>
+    </div>
+</div>

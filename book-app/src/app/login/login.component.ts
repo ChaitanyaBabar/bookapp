@@ -3,6 +3,7 @@ import { Validators, FormGroup, FormBuilder, FormGroupDirective } from '@angular
 import { UsersService } from '../_shared/users.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../_shared/authentication.service';
 
 @Component({
   selector: 'book-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private userService: UsersService,
-              private router: Router) {
+              private router: Router,
+              private authenticationService: AuthenticationService) {
   }
 
 
@@ -41,7 +43,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     const success = (user) => {
       if (user){
-        this.router.navigate(['/welcome']);
+        const url = this.authenticationService.redirectUrl ? this.authenticationService.redirectUrl : 'welcome';
+        this.authenticationService.redirectUrl = undefined;
+        this.router.navigate([`/${url}`]);
       }
      };
 

@@ -1,4 +1,46 @@
-<div fxLayout="row" class="book-list-component">
-    <p>books-list works!</p>
+<div fxLayout="row" fxLayoutAlign="center center" class="book-list-component-wrapper">
+    <div fxLayout="column" class="book-list-component">
+
+              
+        <mat-card *ngFor="let book of bookList" class="book-card">
+            <mat-card-header>
+                <img  matCardAvatar [src]="book.imagePath" class="book-header-image">
+                <mat-card-title>{{book.name}}</mat-card-title>
+                <mat-card-subtitle>{{book.subject}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image [src]="book.imagePath">
+        
+            <mat-card-content>
+            </mat-card-content>
+        
+            <mat-card-actions>
+                <button class="book-app-action-buttons" mat-raised-button color="primary" aria-label="Get Book Details">
+                    <a [routerLink]="[book._id]">See Details</a>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card *ngIf="noRecordFound" class="book-card">
+            <mat-card-header>
+                <div mat-card-avatar class="book-header-image"></div>
+                <mat-card-title>Book List Empty</mat-card-title>
+                <mat-card-subtitle></mat-card-subtitle>
+            </mat-card-header>
+            <!-- 
+                TODO: Add Not Found Image
+                <img mat-card-image [src]="book.imagePath"> 
+            -->
+            <mat-card-content>
+                No Records Founds
+            </mat-card-content>
+        
+            <mat-card-actions>
+                <button  mat-button aria-label="details">
+                    <a [routerLink]="['welcome']">Welcome</a>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+    </div>
 </div>   
 

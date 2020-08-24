@@ -7,10 +7,10 @@
         </mat-card-title>    
 
         <mat-card-content>        
-            <form novalidate #login="ngForm" [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit(login)">
+            <form novalidate #login="ngForm" [formGroup]="loginForm"  (ngSubmit)="onSubmit(login)">
               <mat-form-field>
                 <mat-icon matPrefix>person_outline</mat-icon>
-                <input type="email" autofocus matInput placeholder="Email" formControlName="email">
+                <input type="email" matInput placeholder="Email" formControlName="email">
               </mat-form-field>
 
               <mat-form-field>

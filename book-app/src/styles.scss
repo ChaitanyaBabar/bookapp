@@ -13,9 +13,45 @@ body {
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 
+/* Generic Css Goes Here*/
+.book-app-action-buttons{
+    cursor: pointer;
+
+    a{
+        color: #fff;
+        text-decoration: none;
+    }
+    a:hover,
+    a:active,
+    a:visited{
+        color: #fff;
+    }
+
+}
+button.book-app-action-buttons .mat-button-focus-overlay,
+button.book-app-action-buttons .mat-button-ripple{
+   display: none !important;
+}
+
 /* Over Ride the material css*/
 
+.success{
+    background:rgb(139, 195, 74)
+}
+
+// App Component
 button.book-main-menu .mat-button-focus-overlay,
 button.book-main-menu .mat-button-ripple{
    display: none !important;
+}
+
+// Book Detail Component
+.book-detail-component .mat-input-element:disabled{
+    color: rgba(0, 0, 0, 0.87);
+}
+
+// Book Edit Component
+.book-edit-component .mat-input-element:disabled{
+    color: rgba(0, 0, 0, 0.87);
+    cursor: not-allowed;
 }

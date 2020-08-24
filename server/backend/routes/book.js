@@ -58,7 +58,7 @@ router.get('/dummy/:Did', validateRequest, checkForPermissions, (req, res, next)
  * All the operations are done depending upon the logged in user id.
  *
 */
-router.post('/single', validateRequest, checkForPermissions,uploads.single("userImage"), (req, res, next) => {
+router.post('/single', validateRequest, checkForPermissions, uploads.single("userImage"), (req, res, next) => {
   // If Token Present
   if (req.decodedToken.id) {
       User.findById(req.decodedToken.id)
@@ -285,7 +285,7 @@ router.get('/book/:bookId', validateRequest, checkForPermissions, (req, res, nex
       .then(records =>{
         if(records && records.length > 0 ){
 
-          Book.find({addedBy: records[0]._id, _id: bookId})
+          Book.find({_id: bookId})
           .select('name _id price addedBy imagePath author subject bookCondition publication standard category')
           .populate('addedBy')
           .exec()
@@ -361,6 +361,10 @@ router.patch('/book/:bookId', validateRequest, checkForPermissions,  (req, res, 
                     if (ops.propName !== '_id') {
                         updateOps[ops.propName] = ops.value;
                     }
+                }
+
+                if(req.file && req.file.path){
+                    updateOps[imagePath] = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
                 }
 
                 Book.find({addedBy: records[0]._id, _id: bookId})

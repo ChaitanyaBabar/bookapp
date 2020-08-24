@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UsersService } from './_shared/users.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -7,11 +9,16 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  constructor() {
+  constructor(private userService: UsersService,
+              private router: Router) {
     this.initializeApp();
   }
 
   initializeApp() {
+  }
 
+  logout(){
+    this.userService.logout();
+    this.router.navigate([`login`]);
   }
 }

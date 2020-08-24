@@ -1,3 +1,117 @@
-<div fxLayout="row" class="book-edit-component">
-    <p>book-edit works!</p>
+<div fxLayout="row" fxLayoutAlign="center center" class="book-edit-component-wrapper">
+    <div fxLayout="column" class="book-edit-component">
+        <mat-card>
+          <mat-card-title class="" color="primary">
+            Book Edit Information
+          </mat-card-title>
+      
+          <mat-card-content>
+            <form fxLayout="column" enctype="multipart/form-data"  #bookEdit="ngForm" novalidate [formGroup]="bookEditForm" (ngSubmit)="onSubmit(bookEdit)">
+      
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Book Name" formControlName="name" required>
+                <mat-error *ngIf="bookEditForm.controls.name.errors?.required">
+                  Book name is required.
+                </mat-error>
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input type="number" matInput placeholder="Price" formControlName="price" required>
+                <mat-error *ngIf="bookEditForm.controls.price.errors?.required">
+                  Price is required.
+                </mat-error>
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Book Condition" formControlName="bookCondition" required>
+                <mat-error *ngIf="bookEditForm.controls.bookCondition.errors?.required">
+                  Book condition is required.
+                </mat-error>
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Publication" formControlName="publication">
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Standard" formControlName="standard" required>
+                <mat-error *ngIf="bookEditForm.controls.standard.errors?.required">
+                  Standard is required.
+                </mat-error>
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Category" formControlName="category">
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Author" formControlName="author">
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Subject" formControlName="subject" required>
+                <mat-error *ngIf="bookEditForm.controls.subject.errors?.required">
+                  Subject is required.
+                </mat-error>
+              </mat-form-field>
+        
+              <mat-form-field fxFlex="50%" class="form-element">
+                <input matInput placeholder="Posted By" formControlName="postedBy">
+              </mat-form-field>
+
+
+              <div fxLayout="row" class="book-upload-image-wrapper">
+                <div fxFlex="50%" class="form-element">
+                    <div class="book-preview-wrapper">
+                      <div id="bookPreviewWrapper" [style.backgroundImage]="'url('+ imageUrl +')'">
+                      </div>
+                    </div>
+                </div>
+                <div class="upload-book-image-wrapper" fxFlex="50%" fxLayout="column" fxLayoutAlign="center center">
+    
+                  <button  type="button" mat-raised-button  color="primary" (click)="fileInput.click()" aria-label="Upload Book Image">
+                    Upload Book Image
+                  </button>
+                  <div class="book-upload">
+                    <input #fileInput  type='file' id="imageUpload" accept=".png, .jpg, .jpeg" (change)="uploadFile($event)" />
+                    <mat-error *ngIf="bookImageUploadSizeError">
+                      Image Size Must be less than 1MB.
+                    </mat-error>  
+                  </div>
+    
+                </div>  
+              </div>
+
+
+
+              <div class="book-app-action-buttons-wrapper" fxLayoutAlign="end center" fxLayout="row">
+                    <button
+                      *ngIf="typeOfEdit == 'editBook'"
+                      class="book-app-action-buttons" 
+                      [disabled]="(!bookEditForm.valid && bookImageUploadSizeError) || !bookEditForm.dirty" 
+                      type="submit" mat-raised-button 
+                      color="primary">
+                        Save      
+                    </button>
+                    <button 
+                    *ngIf="typeOfEdit != 'editBook'"
+                    class="book-app-action-buttons" 
+                    [disabled]="(!bookEditForm.valid && bookImageUploadSizeError)" 
+                    type="submit" mat-raised-button 
+                    color="primary">
+                      Create Book      
+                  </button>
+                    <button class="book-app-action-buttons" (click)="navigateTo('list')" mat-raised-button color="accent">
+                      Cancel 
+                    </button>
+              </div>
+            </form>
+                
+          </mat-card-content>
+          
+          
+
+        </mat-card> 
+    
+      </div>
 </div>   

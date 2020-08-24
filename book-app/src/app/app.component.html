@@ -27,6 +27,9 @@
         <button class="book-main-menu" mat-button aria-label="Login">
           <a [routerLink]="['login']">Login</a>
         </button>
+        <button class="book-main-menu" mat-button aria-label="Login">
+          <a (click)="logout()">Logout</a>
+        </button>
       </div> 
     </mat-toolbar>
   </div>
