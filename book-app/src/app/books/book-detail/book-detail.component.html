@@ -1,5 +1,5 @@
 <div fxLayout="row"  fxLayoutAlign="center center" class="book-detail-component-wrapper">
-  <div fxLayout="column" class="book-detail-component">
+  <div fxLayout="column" *ngIf="!showError" class="book-detail-component">
     <mat-card>
       <mat-card-title class="" color="primary">
         Book Detail Information
@@ -69,7 +69,7 @@
           </div>
 
           <div fxLayoutAlign="end center" class="book-app-action-buttons-wrapper"  fxLayout="row">
-            <button type="button" class="book-app-action-buttons" (click)="navigateTo('edit')" mat-raised-button color="primary">
+            <button type="button" class="book-app-action-buttons book-app-primary-button" (click)="navigateTo('edit')" mat-raised-button color="primary">
                 Edit      
             </button>
             <button type="button" class="book-app-action-buttons" (click)="navigateTo('list')" mat-raised-button color="accent">
@@ -83,5 +83,21 @@
 
 
 
+  </div>
+
+  <div *ngIf="showError" fxLayout="column" class="book-detail-error">
+    <mat-card>
+      <mat-card-title  class="" color="primary">
+        No record found
+      </mat-card-title>
+      <mat-card-content>
+          {{errorMessage}}
+      </mat-card-content>
+      <mat-card-actions>
+        <button class="book-app-action-buttons" (click)="navigateTo('list')" mat-raised-button color="primary">
+          Book List 
+        </button>
+      </mat-card-actions>    
+    </mat-card>  
   </div>
 </div>   

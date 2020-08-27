@@ -21,11 +21,15 @@ export class BookEditComponent implements OnInit , OnDestroy {
   bookEditSubscription: Subscription;
 
   bookEditForm: FormGroup;
+  bookEditFormData: FormData;
 
   imageUrl: any;
   bookImageUploadSizeError = false;
   typeOfEdit: string;
   uploadedBookImageFile: any;
+
+  showError =  false;
+  errorMessage: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -100,21 +104,30 @@ export class BookEditComponent implements OnInit , OnDestroy {
     });
 
     const success = (data) => {
+      this.showError = false;
+      this.errorMessage = '';
       if ( data && data.resolvedData && data.resolvedData.books && data.resolvedData.books.length > 0) {
           this.book = data.resolvedData.books[0];
           this.imageUrl = this.book.imagePath;
           this.typeOfEdit = 'editBook';
+          this.bookEditForm.reset();
           this.updateBookEditForm();
       }else if (data && data.resolvedData && data.resolvedData.book){
           this.book = data.resolvedData.book;
           this.typeOfEdit = 'addNewBook';
+          this.bookEditForm.reset();
           this.updateBookEditForm();
       }
-      
-      if (data.resolvedData.error){
-        throw new Error(data.resolvedData.error);
+
+      if (data.resolvedData && data.resolvedData.error){
+        this.bookEditForm.reset();
+        this.showError = true;
+        this.errorMessage = data.resolvedData.error;
+        this.notificationService.showError(this.errorMessage);
       }
-    };
+    // throw new Error(data.resolvedData.error);
+
+  };
 
     const error = (errorData) => {
       throw new Error (errorData);
@@ -165,6 +178,16 @@ export class BookEditComponent implements OnInit , OnDestroy {
     }
   }
 
+   // TODO: Kept the isFromInvalid function to know the invalid Form Logic (code is present in form of conditions in html template)
+  isFormInvalid(){
+    if ((this.bookEditForm.valid &&
+        this.bookEditForm.dirty) ||
+        (!this.bookImageUploadSizeError &&
+        this.uploadedBookImageFile)){
+        return false;
+    }
+    return true;
+  }
   navigateTo(location: string){
     this.router.navigateByUrl('books');
   }
@@ -179,6 +202,7 @@ export class BookEditComponent implements OnInit , OnDestroy {
   }
 
   onSubmit(booksEditDirective: FormGroupDirective) {
+      this.bookEditFormData = new FormData();
       // stop here if form is invalid
       if (this.bookEditForm.invalid && this.bookImageUploadSizeError) {
         return;
@@ -197,8 +221,14 @@ export class BookEditComponent implements OnInit , OnDestroy {
       const success = (data) => {
         // Clearing uploaded image file
         this.uploadedBookImageFile = null;
+        // TODO: Decide whether to reset form or not.
+
         if (data && data.message && !data.info){
-          return this.notificationService.showSuccess(data.message);
+              if (this.typeOfEdit === 'addNewBook'){
+                this.bookEditForm.reset();
+                this.router.navigateByUrl('books');
+              }
+              return this.notificationService.showSuccess(data.message);
         }
         if (data.info && data.info.nModified === 0){
           return this.notificationService.showError(data.message);
@@ -206,17 +236,20 @@ export class BookEditComponent implements OnInit , OnDestroy {
         if (data.resolvedData.error){
           throw new Error(data.resolvedData.error);
         }
+
+
       };
       const error = (errorData) => {
-        // Clearing uploaded image file
+        // Clearing uploaded image file and resetting form
         this.uploadedBookImageFile = null;
-        throw new Error (errorData);
+        throw errorData;
       };
 
 
       if (this.typeOfEdit === 'editBook'){
         // tslint:disable-next-line: no-shadowed-variable
-        const updatedBookData = Object.keys(book).filter((key) => {
+        let updatedBookData;
+        Object.keys(book).filter((key) => {
             if (key !== 'addedBy' && key !== 'imagePath') {
                   if (key === 'userImage' && this.uploadedBookImageFile){
                       return key;
@@ -226,23 +259,30 @@ export class BookEditComponent implements OnInit , OnDestroy {
 
             }
             }).map((key) => {
-                    return {
-                        propName: key,
-                        value: book[key]
-                    };
+              this.bookEditFormData.append(key, this.bookEditForm.get(key).value);
           });
 
-
+        updatedBookData = this.bookEditFormData;
         const bookId = this.book._id;
         this.bookEditSubscription = this.bookService.updateBook(updatedBookData, bookId).subscribe(success, error);
       }
-      else if (this.typeOfEdit === 'createBook'){
-        this.bookEditSubscription = this.bookService.createBook(book).subscribe(success, error);
+      else if (this.typeOfEdit === 'addNewBook'){
+        let createBookData;
+        Object.keys(book).filter((key) => {
+          if (key !== 'addedBy' && key !== 'imagePath') {
+              if (key === 'userImage' && this.uploadedBookImageFile) {
+                  return key;
+              } else if (key !== 'userImage') {
+                  return key;
+              }
+          }})
+          .map((key) => {
+              this.bookEditFormData.append(key, this.bookEditForm.get(key).value);
+          });
+        createBookData = this.bookEditFormData;
+        this.bookEditSubscription = this.bookService.createBook(createBookData).subscribe(success, error);
       }
-
-
   }
-
 
 
 

@@ -15,6 +15,7 @@ import { BookEditComponent } from './book-edit/book-edit.component';
 import { AuthGuard } from '../_helpers/auth.guard';
 import { MaterialModule } from '../material/material.module';
 import { BookResolverService } from '../books/book-resolver.service';
+import { ProductEditGuard } from '../_helpers/product-edit.guard';
 
 
 
@@ -34,6 +35,7 @@ const routes: Routes = [
       path: 'books/:id/edit',
       component: BookEditComponent,
       canActivate: [AuthGuard],
+      canDeactivate: [ProductEditGuard],
       resolve: { resolvedData: BookResolverService }
   }
 ];

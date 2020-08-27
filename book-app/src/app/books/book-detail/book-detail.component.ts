@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from 'src/app/model/book.model';
 import { Subscription } from 'rxjs';
 import { FormGroup, Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
+import { NotificationService } from '../../_shared/notification.service';
 
 @Component({
   selector: 'book-book-detail',
@@ -17,10 +18,13 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   imageUrl: any;
 
 
+  showError =  false;
+  errorMessage: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
+              private notificationService: NotificationService
               ) {}
 
   ngOnInit(): void {
@@ -84,14 +88,20 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     });
 
     const success = (data) => {
-      if ( data && data.resolvedData && data.resolvedData.books && data.resolvedData.books.length > 0) {
+        this.showError = false;
+        this.errorMessage = '';
+
+        if (data && data.resolvedData && data.resolvedData.books && data.resolvedData.books.length > 0) {
           this.book = data.resolvedData.books[0];
           this.imageUrl = this.book.imagePath;
           this.updateBookDetailForm();
       }
-      if (data.resolvedData.error){
-        throw new Error(data.resolvedData.error);
-      }
+        if (data.resolvedData && data.resolvedData.error){
+            this.showError = true;
+            this.errorMessage = data.resolvedData.error;
+            this.notificationService.showError(this.errorMessage);
+        }
+        // throw new Error(data.resolvedData.error);
     };
 
     const error = (errorData) => {

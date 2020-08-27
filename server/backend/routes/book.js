@@ -347,7 +347,7 @@ router.get('/book/:bookId', validateRequest, checkForPermissions, (req, res, nex
     }
 
 });
-router.patch('/book/:bookId', validateRequest, checkForPermissions,  (req, res, next) => {
+router.patch('/book/:bookId', validateRequest, checkForPermissions, uploads.single("userImage"),  (req, res, next) => {
   var userEmailID = req.decodedToken.email;
   if(userEmailID){
     var bookId = req.params.bookId;
@@ -356,15 +356,19 @@ router.patch('/book/:bookId', validateRequest, checkForPermissions,  (req, res, 
     .exec()
     .then(records =>{
               if(records && records.length > 0 ){
-                const updateOps = {};
+                var updateOps = {};
+                // TODO: Remove this unwanted code for patching new request.
+                /*
                 for (const ops of req.body) {
                     if (ops.propName !== '_id') {
                         updateOps[ops.propName] = ops.value;
                     }
                 }
+                */
+                updateOps = req.body;
 
                 if(req.file && req.file.path){
-                    updateOps[imagePath] = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
+                    updateOps.imagePath = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
                 }
 
                 Book.find({addedBy: records[0]._id, _id: bookId})
@@ -377,6 +381,7 @@ router.patch('/book/:bookId', validateRequest, checkForPermissions,  (req, res, 
                       console.log("Patching docs" + docs);
                           res.status(200).json({
                               message: 'Book Updated Successfully !!!',
+                              updateBook: updateOps,
                               request: {
                                   type: 'GET',
                                   url: 'http://localhost:3001/books/v1/book/' + bookId
@@ -603,15 +608,21 @@ router.get('/user/:userID/book/:bookID', validateRequest, checkForPermissions,(r
     });
   }
 });
-router.patch('/user/:userID/book/:bookID', validateRequest,checkForPermissions, (req, res, next) => {
+router.patch('/user/:userID/book/:bookID', validateRequest,checkForPermissions,uploads.single("userImage"), (req, res, next) => {
   var userID = req.params.userID;
   if(userID){
     const bookID = req.params.bookID;
-    const updateOps = {};
-    for (const ops of req.body) {
-        if (ops.propName !== '_id') {
-            updateOps[ops.propName] = ops.value;
-        }
+    var updateOps = {};
+     // TODO: Remove this unwanted code for patching new request.
+    // for (const ops of req.body) {
+    //     if (ops.propName !== '_id') {
+    //         updateOps[ops.propName] = ops.value;
+    //     }
+    // }
+    updateOps = req.body;
+
+    if(req.file && req.file.path){
+        updateOps.imagePath = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
     }
     Book.find({addedBy: userID, _id: bookID})
         .update({ _id: bookID }, { $set: updateOps })
@@ -621,6 +632,7 @@ router.patch('/user/:userID/book/:bookID', validateRequest,checkForPermissions, 
                 console.log("Patching docs" + docs);
                 return res.status(200).json({
                     message: 'Book Updated Successfully !!!',
+                    updatedBook: updateOps,
                     request: {
                         type: 'GET',
                         url: `http://localhost:3001/books/v1/user/${userID}/book/${bookID}`

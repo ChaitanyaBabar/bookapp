@@ -70,10 +70,9 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
     const status = err.status || 500;
-    res.status(status)
-    return res.json({
+    return res.status(status).json({
         error: err.message
-    });
+    })
 })
 
 module.exports = app;

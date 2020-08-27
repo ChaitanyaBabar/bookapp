@@ -19,8 +19,12 @@
 .book-preview-wrapper{
     height: 150px;
     width: 150px;
+    border: 1px solid rgba(0, 0, 0, 0.54);
 }
 .book-upload-image-wrapper{
     width:450px;
-    margin-bottom:15px;
+    margin-bottom:30px;
+}
+.book-edit-error{
+    margin-top: 25px;;
 }

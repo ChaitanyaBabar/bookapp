@@ -1,8 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="book-edit-component-wrapper">
-    <div fxLayout="column" class="book-edit-component">
+    <div *ngIf="!showError" fxLayout="column" class="book-edit-component">
         <mat-card>
-          <mat-card-title class="" color="primary">
+          <mat-card-title  *ngIf="typeOfEdit == 'editBook'" class="" color="primary">
             Book Edit Information
+          </mat-card-title>
+          <mat-card-title  *ngIf="typeOfEdit == 'addNewBook'" class="" color="primary">
+            Add Book
           </mat-card-title>
       
           <mat-card-content>
@@ -87,16 +90,18 @@
               <div class="book-app-action-buttons-wrapper" fxLayoutAlign="end center" fxLayout="row">
                     <button
                       *ngIf="typeOfEdit == 'editBook'"
-                      class="book-app-action-buttons" 
-                      [disabled]="(!bookEditForm.valid && bookImageUploadSizeError) || !bookEditForm.dirty" 
+                      class="book-app-action-buttons book-app-primary-button" 
+                      [disabled]="(!this.bookEditForm.valid || !this.bookEditForm.dirty) && (this.bookImageUploadSizeError ||
+                      !this.uploadedBookImageFile) " 
                       type="submit" mat-raised-button 
                       color="primary">
                         Save      
                     </button>
                     <button 
-                    *ngIf="typeOfEdit != 'editBook'"
-                    class="book-app-action-buttons" 
-                    [disabled]="(!bookEditForm.valid && bookImageUploadSizeError)" 
+                    *ngIf="typeOfEdit == 'addNewBook'"
+                    class="book-app-action-buttons book-app-primary-button" 
+                    [disabled]="(!this.bookEditForm.valid || !this.bookEditForm.dirty) && (this.bookImageUploadSizeError ||
+                      !this.uploadedBookImageFile)" 
                     type="submit" mat-raised-button 
                     color="primary">
                       Create Book      
@@ -108,10 +113,24 @@
             </form>
                 
           </mat-card-content>
-          
-          
 
         </mat-card> 
     
-      </div>
+    </div>
+
+    <div *ngIf="showError" fxLayout="column" class="book-edit-error">
+      <mat-card>
+        <mat-card-title  class="" color="primary">
+          No record found
+        </mat-card-title>
+        <mat-card-content>
+            {{errorMessage}}
+        </mat-card-content>
+        <mat-card-actions>
+          <button class="book-app-action-buttons" (click)="navigateTo('list')" mat-raised-button color="primary">
+            Book List  
+          </button>
+        </mat-card-actions>    
+      </mat-card>  
+    </div>  
 </div>   
