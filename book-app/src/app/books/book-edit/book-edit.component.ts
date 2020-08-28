@@ -221,12 +221,18 @@ export class BookEditComponent implements OnInit , OnDestroy {
       const success = (data) => {
         // Clearing uploaded image file
         this.uploadedBookImageFile = null;
-        // TODO: Decide whether to reset form or not.
 
-        if (data && data.message && !data.info){
+        if (data && data.message && !data.infoMessage){
               if (this.typeOfEdit === 'addNewBook'){
+                  this.bookEditForm.reset();
+                  this.router.navigateByUrl('books');
+              }
+              else if (this.typeOfEdit === 'editBook'){
+                const newUpdatedDoc = data.updatedBook;
+                // TODO: Decide whether to reset form or not.
                 this.bookEditForm.reset();
-                this.router.navigateByUrl('books');
+                this.book = newUpdatedDoc;
+                this.updateBookEditForm();
               }
               return this.notificationService.showSuccess(data.message);
         }
@@ -242,6 +248,7 @@ export class BookEditComponent implements OnInit , OnDestroy {
       const error = (errorData) => {
         // Clearing uploaded image file and resetting form
         this.uploadedBookImageFile = null;
+
         throw errorData;
       };
 

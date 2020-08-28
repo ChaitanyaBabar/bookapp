@@ -37,7 +37,19 @@ const bookSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Registered',
         require: true
-    }
+    },
+    interestedBuyersList: [{
+        quotePrice: {
+            type: Number        
+        },
+        buyer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Registered'
+        },
+        bought: {
+            type: Boolean
+        }
+    }]
 })
 
 module.exports = mongoose.model('Book', bookSchema);

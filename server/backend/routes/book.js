@@ -355,54 +355,53 @@ router.patch('/book/:bookId', validateRequest, checkForPermissions, uploads.sing
     .select('firstName _id email userRole')
     .exec()
     .then(records =>{
-              if(records && records.length > 0 ){
-                var updateOps = {};
-                // TODO: Remove this unwanted code for patching new request.
-                /*
-                for (const ops of req.body) {
-                    if (ops.propName !== '_id') {
-                        updateOps[ops.propName] = ops.value;
-                    }
+            if(records && records.length > 0 ){
+            var updateOps = {};
+            // TODO: Remove this unwanted code for patching new request.
+            /*
+            for (const ops of req.body) {
+                if (ops.propName !== '_id') {
+                    updateOps[ops.propName] = ops.value;
                 }
-                */
-                updateOps = req.body;
+            }
+            */
+            updateOps = req.body;
 
-                if(req.file && req.file.path){
-                    updateOps.imagePath = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
-                }
+            if(req.file && req.file.path){
+                updateOps.imagePath = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
+            }
 
-                Book.find({addedBy: records[0]._id, _id: bookId})
-                .update({ _id: bookId }, { $set: updateOps })
-                .select('name _id price addedBy imagePath author subject bookCondition publication standard category')
-                .populate('addedBy')
-                .exec()
-                .then(docs => {
-                    if (docs && docs.ok && docs.nModified > 0) {
-                      console.log("Patching docs" + docs);
-                          res.status(200).json({
-                              message: 'Book Updated Successfully !!!',
-                              updateBook: updateOps,
-                              request: {
-                                  type: 'GET',
-                                  url: 'http://localhost:3001/books/v1/book/' + bookId
-                              }
-                          })
-                    }else {
-                        return res.status(200).json({
-                            message: `No Book record for given book id: ${bookId} found`,
-                            info: docs
-                        });
-                    }
-                })
-                .catch(err => {
-                    return res
-                        .status(500)
-                        .json({
-                            error: err.message
+            Book.findOneAndUpdate({addedBy: records[0]._id, _id: bookId}, { $set: updateOps }, { "new": true,  rawResult: false})
+            .select('name _id price addedBy imagePath author subject bookCondition publication standard category')
+            .populate('addedBy')
+            .exec()
+            .then(docs => {
+                if (docs) {
+                        //console.log("Patching docs" + docs);
+                        res.status(200).json({
+                            message: 'Book Updated Successfully !!!',
+                            updatedBook: docs,
+                            request: {
+                                type: 'GET',
+                                url: 'http://localhost:3001/books/v1/book/' + bookId
+                            }
                         })
-                });
+                }else {
+                    return res.status(200).json({
+                        infoMessage: `No Book record for given book id: ${bookId} found`,
+                        message: docs ? docs : 'Update unsuccessful'
+                    });
+                }
+            })
+            .catch(err => {
+                return res
+                    .status(500)
+                    .json({
+                        error: err.message
+                    })
+            });
 
-              }
+            }
     })
     .catch(err => {
         return res
@@ -624,15 +623,16 @@ router.patch('/user/:userID/book/:bookID', validateRequest,checkForPermissions,u
     if(req.file && req.file.path){
         updateOps.imagePath = 'http://localhost:3001/' + req.file.path.replace('\\', '/');
     }
-    Book.find({addedBy: userID, _id: bookID})
-        .update({ _id: bookID }, { $set: updateOps })
+    Book.findOneAndUpdate({addedBy: userID, _id: bookID}, { $set: updateOps })
+        .select('name _id price addedBy imagePath author subject bookCondition publication standard category')
+        .populate('addedBy')
         .exec()
         .then(docs => {
-            if (docs && docs.ok && docs.nModified > 0) {
-                console.log("Patching docs" + docs);
+            if (docs) {
+                //console.log("Patching docs" + docs);
                 return res.status(200).json({
                     message: 'Book Updated Successfully !!!',
-                    updatedBook: updateOps,
+                    updatedBook: docs,
                     request: {
                         type: 'GET',
                         url: `http://localhost:3001/books/v1/user/${userID}/book/${bookID}`
@@ -641,8 +641,8 @@ router.patch('/user/:userID/book/:bookID', validateRequest,checkForPermissions,u
             }
             else{
                 return res.status(200).json({
-                    message: `No Book record for user ${userID} for given book id: ${bookID} found`,
-                    info: docs
+                    infoMessage: `No Book record for user ${userID} for given book id: ${bookID} found`,
+                    message: docs ? docs : 'Update unsuccessful'
                 });
             }
         })

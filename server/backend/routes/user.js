@@ -81,11 +81,15 @@ router.get('/:userId',validateRequest, (req, res, next) => {
 router.patch('/:userId',validateRequest,(req, res, next) => {
     var registeredUserId = req.params.userId;
     const updateOps = {};
+    // TODO: Remove this unwanted code for patching new request.
+    /*
     for (const ops of req.body) {
         if (ops.propName !== '_id') {
             updateOps[ops.propName] = ops.value;
         }
     }
+    */
+    updateOps = req.body;
     registeredUsers.update({ _id: registeredUserId }, { $set: updateOps })
         .exec()
         .then(docs => {

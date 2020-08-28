@@ -19,7 +19,16 @@ const registeredSchema = mongoose.Schema({
         type: String,
         require: true,
         enum: Object.values(TypesOfUsers)
-    }
+    },
+    interestedBookList:[{
+        quotedPrice:{
+            type: Number
+        },
+        book:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Book'
+        }
+    }]
 });
 
 module.exports = mongoose.model("Registered", registeredSchema);
