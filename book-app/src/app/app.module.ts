@@ -35,12 +35,14 @@ import { BasicAuthInterceptorService } from './_helpers/basic-auth-interceptor.s
 import { GlobalErrorHandlerService } from './_helpers/global-error-handler.service';
 import { ServerErrorInterceptorService } from './_helpers/server-error-interceptor.service';
 import { BookDialogComponent } from './book-dialog/book-dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
 @NgModule({
   imports: [
      BrowserModule,
+     BrowserAnimationsModule,
      ReactiveFormsModule,
      MaterialModule,
      FlexLayoutModule,

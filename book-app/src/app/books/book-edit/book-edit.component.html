@@ -85,8 +85,6 @@
                 </div>  
               </div>
 
-
-
               <div class="book-app-action-buttons-wrapper" fxLayoutAlign="end center" fxLayout="row">
                     <button
                       *ngIf="typeOfEdit == 'editBook'"
@@ -106,7 +104,7 @@
                     color="primary">
                       Create Book      
                   </button>
-                    <button class="book-app-action-buttons" (click)="navigateTo('list')" mat-raised-button color="accent">
+                    <button class="book-app-action-buttons" type="button" (click)="navigateTo('list')" mat-raised-button color="accent">
                       Cancel 
                     </button>
               </div>
