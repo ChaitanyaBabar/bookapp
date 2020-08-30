@@ -4,9 +4,7 @@ const router = express.Router();
 
 // Modals
 const Registered = require('../models/registered');
-const Book = require('./../models/book');
 const User = require('../models/user');
-const registeredUsers = require('../models/registered');
 
 // Middle Ware
 const mongoose = require('mongoose');
@@ -17,7 +15,7 @@ const checkForPermissions = require('../middle-ware/check-authorization');
 
 // Multiple user list
 router.get('/list', validateRequest,(req, res, next) => {
-    registeredUsers.find()
+    Registered.find()
         .select('_id firstName email userRole')
         .exec()
         .then(docs => {
@@ -57,7 +55,7 @@ router.get('/list', validateRequest,(req, res, next) => {
 router.get('/:userId',validateRequest, (req, res, next) => {
     var registeredUserId = req.params.userId;
     console.log('userId is' + registeredUserId);
-    registeredUsers.findById(registeredUserId)
+    Registered.findById(registeredUserId)
         .select('_id firstName email userRole')
         .exec()
         .then(docs => {
@@ -90,7 +88,7 @@ router.patch('/:userId',validateRequest,(req, res, next) => {
     }
     */
     updateOps = req.body;
-    registeredUsers.update({ _id: registeredUserId }, { $set: updateOps })
+    Registered.update({ _id: registeredUserId }, { $set: updateOps })
         .exec()
         .then(docs => {
             if (docs) {
@@ -124,7 +122,7 @@ router.patch('/:userId',validateRequest,(req, res, next) => {
 });
 router.delete('/:userId',validateRequest, (req, res, next) => {
     var registeredUserId = req.params.userId;
-    registeredUsers.remove({ _id: registeredUserId })
+    Registered.remove({ _id: registeredUserId })
         .exec()
         .then(docs => {
             if (docs) {
@@ -154,6 +152,13 @@ router.delete('/:userId',validateRequest, (req, res, next) => {
                 message: err
             })
         });
+});
+
+
+router.get('/buyers/list', (req, res, next) => {
+    // Buyers Model :- get bookId of every uploaded book by user in book model
+                    // and search the bookID in the buyer model under bookInterested book
+                    // return populated(buyer) list
 });
 
 /*

@@ -474,6 +474,12 @@ router.delete('/book/:bookId', validateRequest,checkForPermissions, (req, res, n
 
 
 
+router.get('/interested/list', (req, res, next) => {
+    // Buyers Model :- search by Registered user id in Buyers Model
+    // return populated(bookInterested) list
+});
+
+
 /*
  * Super User Rest End Points.
  * All the operations are done depending upon the passed userID.

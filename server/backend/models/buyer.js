@@ -7,7 +7,15 @@ const buyerSchema = mongoose.Schema({
         require: true       
     },
     bought: {
-        type: boolean,
+        type: Boolean,
+        require: true
+    },
+    initiateSell: {
+        type: Boolean,
+        require: true
+    },
+    soldComplete:{
+        type: Boolean,
         require: true
     },
     buyer: {
@@ -15,7 +23,7 @@ const buyerSchema = mongoose.Schema({
         ref: 'Registered',
         require: true
     },
-    booksInterested: {
+    bookInterested: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Book',
         require: true

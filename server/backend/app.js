@@ -11,6 +11,7 @@ mongoose.plugin(accessibleRecordsPlugin);
 const bookRoutes = require('./routes/book');
 const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
+const buyerRoutes = require('./routes/buyer');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
@@ -58,6 +59,7 @@ app.use(cors());
 app.use('/books/v1', bookRoutes);
 app.use('/login/v1', loginRoutes);
 app.use('/users/v1', userRoutes);
+app.use('/product/v1', buyerRoutes);
 app.use('/uploads', express.static("./uploads"));
 
 

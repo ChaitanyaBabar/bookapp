@@ -46,7 +46,7 @@ const bookSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Registered'
         },
-        bought: {
+        sold: {
             type: Boolean
         }
     }]

@@ -30,6 +30,22 @@ module.exports = {
               {
                 resources: ['/books/v1/book/all/list'],
                 permissions: ['get'],
+              },
+              {
+                resources: ['/books/v1/interested/list'],
+                permissions: ['get'],
+              },
+              {
+                resources: ['/users/v1/buyers/list'],
+                permissions: ['get'],
+              },
+              {
+                resources: ['/product/v1/buy/initiate'],
+                permissions: ['post'],
+              },
+              {
+                resources: ['/product/v1/sell/initiate', '/product/v1/sold/complete'],
+                permissions: ['patch'],
               }
           ]
       },
