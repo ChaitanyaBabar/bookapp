@@ -5,6 +5,8 @@ const router = express.Router();
 // Modals
 const Registered = require('../models/registered');
 const User = require('../models/user');
+const Book = require('./../models/book');
+const Buyer =  require('../models/buyer');
 
 // Middle Ware
 const mongoose = require('mongoose');
@@ -155,10 +157,92 @@ router.delete('/:userId',validateRequest, (req, res, next) => {
 });
 
 
-router.get('/buyers/list', (req, res, next) => {
+router.get('/buyers/list', validateRequest, checkForPermissions, (req, res, next) => {
     // Buyers Model :- get bookId of every uploaded book by user in book model
                     // and search the bookID in the buyer model under bookInterested book
                     // return populated(buyer) list
+    var userEmailID = req.decodedToken.email;
+    if(userEmailID){
+        Registered.find({email: userEmailID})
+        .select('firstName _id email userRole')
+        .exec()
+        .then(records =>{
+        if(records && records.length > 0 ){
+          Book.find({addedBy: records[0]._id})
+            .select('name _id price addedBy imagePath author subject bookCondition publication standard category')
+            .populate('addedBy')
+            .exec()
+            .then(docs => {
+                if (docs && docs.length > 0) {
+                    var booksAddedByUser = docs.map((item) => { return item._id});  
+                    booksAddedByUser = JSON.parse(JSON.stringify(booksAddedByUser));
+                     Buyer.find({ bookInterested: { $in: booksAddedByUser }})
+                    .select('_id quotedPrice bought initiateSell soldComplete buyer bookInterested')
+                    .populate('buyer bookInterested')
+                    .exec()
+                    .then(docs => {
+                        if (docs && docs.length > 0) {
+                            console.log("Interested buyers list");
+                            const response = {
+                                count: docs.length,
+                                books: docs.map((doc) => {
+                                    return {
+                                        _id: doc._id,
+                                        quotedPrice: doc.quotedPrice,
+                                        bought:doc.bought,
+                                        initiateSell:doc.initiateSell,
+                                        soldComplete:doc.soldComplete,
+                                        price: doc.price,
+                                        buyer: doc.buyer,
+                                        bookInterested: doc.bookInterested,
+                                    }
+                                })
+                            }
+                            return res.status(200).json(response)
+                        } 
+                        else{
+                            return res.status(200).json({
+                                message: "No buyers found for your uploads."
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        return res
+                            .status(500)
+                            .json({
+                                error: err.message
+                            })
+                    });
+                } 
+                else {
+                    return res.status(200).json({
+                        message: `No Book records for user ${userEmailID} found.`
+                    });
+                }
+            })
+            .catch(err => {
+                return res
+                    .status(500)
+                    .json({
+                        error: err.message
+                    })
+            });
+        }
+        else{
+            return res.status(404).json({
+            message: "User is not registered with us !!!"
+            });
+        }
+        })
+        .catch(err => {
+            return res.status(500).json({error: err.message});
+        });
+    }
+    else{
+        return res.status(404).json({
+        message: "Please Enter Valid User id"
+        });
+    }
 });
 
 /*

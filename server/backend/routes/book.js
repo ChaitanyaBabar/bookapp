@@ -6,6 +6,7 @@ const router = express.Router();
 const Registered = require('../models/registered');
 const Book = require('./../models/book');
 const User = require('../models/user');
+const Buyer =  require('../models/buyer');
 
 // Middle Ware
 const mongoose = require('mongoose');
@@ -160,7 +161,7 @@ router.get('/book/list',validateRequest , checkForPermissions, (req, res, next) 
                 return res.status(200).json(response)
             } else {
                 return res.status(200).json({
-                    message: "No records Found"
+                    message: `No books uploaded by user ${userEmailID}`
                 });
             }
         })
@@ -474,9 +475,73 @@ router.delete('/book/:bookId', validateRequest,checkForPermissions, (req, res, n
 
 
 
-router.get('/interested/list', (req, res, next) => {
+router.get('/interested/list', validateRequest, checkForPermissions,(req, res, next) => {
     // Buyers Model :- search by Registered user id in Buyers Model
     // return populated(bookInterested) list
+    var userEmailID = req.decodedToken.email;
+    if(userEmailID){
+  
+      Registered.find({email: userEmailID})
+      .select('firstName _id email userRole')
+      .exec()
+      .then(records =>{
+        if(records && records.length > 0 ){ 
+           Buyer.find({buyer: records[0]._id})
+          .select('_id quotedPrice bought initiateSell soldComplete buyer bookInterested')
+          .populate('buyer bookInterested')
+          .exec()
+          .then(docs => {
+              if (docs && docs.length > 0) {
+                  console.log("Get Request is Made");
+                  const response = {
+                      count: docs.length,
+                      books: docs.map((doc) => {
+                          return {
+                              _id: doc._id,
+                              quotedPrice: doc.quotedPrice,
+                              buyer: doc.buyer,
+                              bookInterested: doc.bookInterested,
+                          }
+                      })
+                  }
+                  return res.status(200).json(response)
+              } else {
+                  return res.status(200).json({
+                      message: `No interested books found for user ${userEmailID}`
+                  });
+              }
+          })
+          .catch(err => {
+              return res
+                  .status(500)
+                  .json({
+                      error: err.message
+                  })
+          });
+        }
+        else{
+  
+          return res.status(404).json({
+            message: "User is not Registered..."
+          });
+  
+        }
+      })
+      .catch(err => {
+        return res
+            .status(500)
+            .json({
+                error: err.message
+            })
+    });
+  
+  
+    }
+    else{
+      return res.status(404).json({
+        message: "User not registered with us !!!"
+      });
+    }
 });
 
 
