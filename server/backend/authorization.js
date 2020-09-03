@@ -46,6 +46,10 @@ module.exports = {
               {
                 resources: ['/product/v1/sell/initiate', '/product/v1/sold/complete'],
                 permissions: ['patch'],
+              },
+              {
+                resources: ['/users/v1/id'],
+                permissions: ['get', 'post', 'patch', 'delete'],
               }
           ]
       },
@@ -69,9 +73,17 @@ module.exports = {
               permissions: ['get'],
             },
             {
-              resources: ['/users/v1/:userId'],
+              resources: ['/users/v1/user/:userId'],
               permissions: ['get', 'post', 'patch', 'delete'],
-            }
+            },
+            {
+              resources: ['/users/v1/user/:userId/buyers/list'],
+              permissions: ['get'],
+            },
+            {
+              resources: ['/books/v1/book/:bookId/interested/list'],
+              permissions: ['get'],
+            },
           ]
       }]);
 

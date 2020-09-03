@@ -766,5 +766,74 @@ router.delete('/user/:userID/book/:bookID', validateRequest,checkForPermissions,
   }
 
 });
+// TODO :- Get the interested book list for specific user i.e. user with provided userID.
+router.get('/book/:bookID/interested/list', validateRequest, checkForPermissions,(req, res, next) => {
+    // Buyers Model :- search by Registered user id in Buyers Model
+    // return populated(bookInterested) list
+    var userEmailID = req.decodedToken.email;
+    if(userEmailID){
+  
+      Registered.find({email: userEmailID})
+      .select('firstName _id email userRole')
+      .exec()
+      .then(records =>{
+        if(records && records.length > 0 ){ 
+           Buyer.find({buyer: records[0]._id})
+          .select('_id quotedPrice bought initiateSell soldComplete buyer bookInterested')
+          .populate('buyer bookInterested')
+          .exec()
+          .then(docs => {
+              if (docs && docs.length > 0) {
+                  console.log("Get Request is Made");
+                  const response = {
+                      count: docs.length,
+                      books: docs.map((doc) => {
+                          return {
+                              _id: doc._id,
+                              quotedPrice: doc.quotedPrice,
+                              buyer: doc.buyer,
+                              bookInterested: doc.bookInterested,
+                          }
+                      })
+                  }
+                  return res.status(200).json(response)
+              } else {
+                  return res.status(200).json({
+                      message: `No interested books found for user ${userEmailID}`
+                  });
+              }
+          })
+          .catch(err => {
+              return res
+                  .status(500)
+                  .json({
+                      error: err.message
+                  })
+          });
+        }
+        else{
+  
+          return res.status(404).json({
+            message: "User is not Registered..."
+          });
+  
+        }
+      })
+      .catch(err => {
+        return res
+            .status(500)
+            .json({
+                error: err.message
+            })
+    });
+  
+  
+    }
+    else{
+      return res.status(404).json({
+        message: "User not registered with us !!!"
+      });
+    }
+});
 
 module.exports = router;
