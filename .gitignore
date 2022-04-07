@@ -48,3 +48,6 @@ Thumbs.db
 /uploads
 .history
 /deadcode
+
+
+package-lock.json
