@@ -8,7 +8,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // FireBase
-import { AngularFireModule } from '@angular/fire';
+// import { AngularFireModule } from '@angular/fire';
 
 
 
@@ -51,7 +51,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     // importing feature modules
      BooksModule,
      AppRoutingModule,
-     AngularFireModule.initializeApp(environment.firebase),
+     //AngularFireModule.initializeApp(environment.firebase),
   ],
   declarations: [
     AppComponent,
