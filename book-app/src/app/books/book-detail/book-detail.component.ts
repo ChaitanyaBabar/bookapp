@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from 'src/app/model/book.model';
 import { Subscription } from 'rxjs';
-import { FormGroup, Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormBuilder, FormGroupDirective } from '@angular/forms';
 import { NotificationService } from '../../_shared/notification.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   book: Book;
   bookSubscription: Subscription;
-  bookDetailForm: FormGroup;
+  bookDetailForm: UntypedFormGroup;
   imageUrl: any;
 
 
@@ -23,7 +23,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private notificationService: NotificationService
               ) {}
 
