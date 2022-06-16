@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, FormGroupDirective } from '@angular/forms';
+import { Validators, UntypedFormGroup, UntypedFormBuilder, FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BooksService } from 'src/app/_shared/books.service';
@@ -20,7 +20,7 @@ export class BookEditComponent implements OnInit , OnDestroy {
   bookSubscription: Subscription;
   bookEditSubscription: Subscription;
 
-  bookEditForm: FormGroup;
+  bookEditForm: UntypedFormGroup;
   bookEditFormData: FormData;
 
   imageUrl: any;
@@ -34,7 +34,7 @@ export class BookEditComponent implements OnInit , OnDestroy {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private bookService: BooksService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
               private authService: AuthenticationService,
               private notificationService: NotificationService) {}
