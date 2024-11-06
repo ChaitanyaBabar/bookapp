@@ -1,0 +1,137 @@
+Subject: [PATCH] book_app_routing_patch
+---
+Index: book-app/src/app/material/material.module.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/book-app/src/app/material/material.module.ts b/book-app/src/app/material/material.module.ts
+--- a/book-app/src/app/material/material.module.ts	(revision cb62612a8b176321f691883d5a002468b4b35493)
++++ b/book-app/src/app/material/material.module.ts	(date 1714308219695)
+@@ -2,7 +2,6 @@
+ 
+ 
+ // Angular Material Components
+-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+ import {MatCheckboxModule} from '@angular/material/checkbox';
+ import {MatButtonModule} from '@angular/material/button';
+ import {MatInputModule} from '@angular/material/input';
+@@ -39,7 +38,6 @@
+   declarations: [
+   ],
+   imports: [
+-    BrowserAnimationsModule,
+     MatCheckboxModule,
+     MatCheckboxModule,
+     MatButtonModule,
+@@ -74,7 +72,6 @@
+ 
+   ],
+   exports:[
+-    BrowserAnimationsModule,
+     MatCheckboxModule,
+     MatCheckboxModule,
+     MatButtonModule,
+Index: book-app/src/app/books/books.module.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/book-app/src/app/books/books.module.ts b/book-app/src/app/books/books.module.ts
+--- a/book-app/src/app/books/books.module.ts	(revision cb62612a8b176321f691883d5a002468b4b35493)
++++ b/book-app/src/app/books/books.module.ts	(date 1716800127527)
+@@ -2,10 +2,6 @@
+ import { CommonModule} from '@angular/common';
+ import { RouterModule, Routes } from '@angular/router';
+ import { ReactiveFormsModule } from '@angular/forms';
+-
+-
+-
+-
+ import { FlexLayoutModule } from '@angular/flex-layout';
+ 
+ // Books Components
+@@ -21,18 +17,18 @@
+ 
+ const routes: Routes = [
+   {
+-      path: 'books',
++      path: '',
+       component: BooksListComponent,
+       canActivate: [AuthGuard]
+   },
+   {
+-      path: 'books/:id',
++      path: ':id',
+       component: BookDetailComponent,
+       canActivate: [AuthGuard],
+       resolve: { resolvedData: BookResolverService }
+   },
+   {
+-      path: 'books/:id/edit',
++      path: ':id/edit',
+       component: BookEditComponent,
+       canActivate: [AuthGuard],
+       canDeactivate: [ProductEditGuard],
+Index: book-app/src/app/login/login.component.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/book-app/src/app/login/login.component.ts b/book-app/src/app/login/login.component.ts
+--- a/book-app/src/app/login/login.component.ts	(revision cb62612a8b176321f691883d5a002468b4b35493)
++++ b/book-app/src/app/login/login.component.ts	(date 1729781581980)
+@@ -45,7 +45,7 @@
+       if (user){
+         const url = this.authenticationService.redirectUrl ? this.authenticationService.redirectUrl : 'welcome';
+         this.authenticationService.redirectUrl = undefined;
+-        this.router.navigate([`/${url}`]);
++        this.router.navigate([`/${url}`], { queryParams: { feature: ' ../yaml/admin-configuration_v01.yaml' } });
+       }
+      };
+ 
+Index: book-app/src/app/app.module.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/book-app/src/app/app.module.ts b/book-app/src/app/app.module.ts
+--- a/book-app/src/app/app.module.ts	(revision cb62612a8b176321f691883d5a002468b4b35493)
++++ b/book-app/src/app/app.module.ts	(date 1714308207976)
+@@ -49,7 +49,7 @@
+      HttpClientModule,
+ 
+     // importing feature modules
+-     BooksModule,
++     //BooksModule,
+      AppRoutingModule,
+      //AngularFireModule.initializeApp(environment.firebase),
+   ],
+Index: book-app/src/app/app-routing.module.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/book-app/src/app/app-routing.module.ts b/book-app/src/app/app-routing.module.ts
+--- a/book-app/src/app/app-routing.module.ts	(revision cb62612a8b176321f691883d5a002468b4b35493)
++++ b/book-app/src/app/app-routing.module.ts	(date 1729781381042)
+@@ -15,6 +15,10 @@
+   component: LoginComponent
+ },
+ {
++  path: 'books',
++  loadChildren: () => import('./books/books.module').then(m => m.BooksModule)
++},
++{
+   path: '',
+   redirectTo: 'welcome',
+   pathMatch: 'full'
+@@ -27,7 +31,7 @@
+ 
+ @NgModule({
+   imports: [
+-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
++    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, useHash: true })
+   ],
+   exports: [RouterModule]
+ })
