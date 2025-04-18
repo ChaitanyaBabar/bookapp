@@ -286,7 +286,7 @@ router.get('/book/:bookId', validateRequest, checkForPermissions, (req, res, nex
       .then(records =>{
         if(records && records.length > 0 ){
 
-          Book.find({_id: bookId})
+          Book.find({addedBy: records[0]._id, _id: bookId})
           .select('name _id price addedBy imagePath author subject bookCondition publication standard category')
           .populate('addedBy')
           .exec()

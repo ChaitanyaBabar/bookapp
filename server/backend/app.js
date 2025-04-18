@@ -2,11 +2,20 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require("cors");
-const { accessibleRecordsPlugin } = require('@casl/mongoose');
 
-
-// Adding the mongoose model before mongoose.model('' ,  {});
-mongoose.plugin(accessibleRecordsPlugin);
+/**
+*
+* Removing the @casel/mongoose plugin as now we have fixed the authorization issue for
+* dyanamic urls for acl (i.e. node_acl) library.
+*
+* Since the acl library is not working correctly for authorization, we do not need
+* to use the @casel/mongoose plugin for authorization.
+*
+* const { accessibleRecordsPlugin } = require('@casl/mongoose');
+*
+* // Adding the mongoose model before mongoose.model('' ,  {});
+* // mongoose.plugin(accessibleRecordsPlugin);
+*/
 
 const bookRoutes = require('./routes/book');
 const loginRoutes = require('./routes/login');
