@@ -22,8 +22,6 @@
     "@angular/platform-browser": "~8.2.10",
     "@angular/platform-browser-dynamic": "~8.2.10",
     "@angular/router": "~8.2.10",
-    "@casl/ability": "^4.1.0",
-    "@casl/mongoose": "^3.0.2",
     "acl": "^0.4.11",
     "bcryptjs": "^2.4.3",
     "core-js": "^2.5.4",
