@@ -23,7 +23,7 @@ jobs:
 
       - name: Add missing headers
         run: |
-          node .github/scripts/add-copyright.js
+          node .github/workflows/add-copyright.js
 
       - name: Commit and Push changes
         run: |
