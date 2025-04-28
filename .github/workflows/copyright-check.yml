@@ -22,7 +22,7 @@ jobs:
       - name: Check Copyrights
         id: check_copyright
         run: |
-          node .github/scripts/check-copyright.js
+          node .github/workflows/check-copyright.js
 
       - name: Auto Fix Missing Copyrights
         if: steps.check_copyright.outputs.copyright_missing == 'true'
