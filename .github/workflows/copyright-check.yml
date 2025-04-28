@@ -1,0 +1,41 @@
+name: Check Copyright on PR
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-copyright:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install glob
+
+      - name: Check Copyrights
+        id: check_copyright
+        run: |
+          node .github/scripts/check-copyright.js
+
+      - name: Auto Fix Missing Copyrights
+        if: steps.check_copyright.outputs.copyright_missing == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "fix: add missing copyright headers"
+          title: "Fix: Copyright headers"
+          body: |
+            This PR automatically fixes missing copyright headers.
+          branch: fix/copyright-${{ github.run_id }}
+
+      - name: Fail PR if missing
+        if: steps.check_copyright.outputs.copyright_missing == 'true'
+        run: |
+          echo "❌ Some files are missing copyright!"
+          exit 1
