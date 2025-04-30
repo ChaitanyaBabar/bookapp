@@ -28,11 +28,11 @@ files.forEach((filePath) => {
 
   if (hasCopyright) {
     // Replace old copyright with new one
-    lines[0] = copyrightHeader;
+    lines[0] = header;
     console.log(`🔁 Updated copyright in: ${filePath}`);
   } else {
     // Insert at top
-    lines.unshift(copyrightHeader, '');
+    lines.unshift(header, '');
     console.log(`➕ Added copyright in: ${filePath}`);
   }
 
