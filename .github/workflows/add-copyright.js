@@ -10,7 +10,7 @@ const year = new Date().getFullYear();
 
 // Define the copyright header dynamically
 const header = `/**
- * Copyright (c) ${year} Chaitanya Babar
+ * Copyright (c) ${year} Chaitanya Babar (cbabar)
  * Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */\n\n`;
 
