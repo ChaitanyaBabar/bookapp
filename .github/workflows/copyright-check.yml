@@ -33,6 +33,7 @@ jobs:
           body: |
             This PR automatically fixes missing copyright headers.
           branch: fix/copyright-${{ github.run_id }}
+          base: ${{ github.event.pull_request.base.ref }}
 
       - name: Fail PR if missing
         if: steps.check_copyright.outputs.copyright_missing == 'true'
