@@ -1,7 +1,7 @@
 const fs = require('fs');
 const glob = require('glob');
 
-const files = glob.sync('server/backend/**/*.js');
+const files = glob.sync('server/**/*.js');
 let missing = [];
 
 files.forEach(file => {
