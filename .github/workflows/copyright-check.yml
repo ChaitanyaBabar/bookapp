@@ -55,3 +55,26 @@ jobs:
             This PR automatically adds or updates missing copyright headers in changed files.
           branch: fix/copyright-${{ github.run_id }}
           base: ${{ github.event.pull_request.head.ref }}
+
+      - name: Comment on PR with fix suggestion
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runId = process.env.GITHUB_RUN_ID;
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `⚠️ **Copyright headers are missing or outdated.** A fix has been proposed in a separate PR: \`fix/copyright-${runId}\`.Please review and merge the fix or update headers manually.`
+            })
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      - name: Add "missing-copyright" label
+        if: failure()
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: missing-copyright
