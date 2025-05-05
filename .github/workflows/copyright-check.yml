@@ -34,7 +34,7 @@ jobs:
 
       - name: Run copyright check
         id: check_copyright
-        run: node .github/workflows/add-copyright.js changed_files.txt
+        run: node .github/workflows/check-copyright.js changed_files.txt
 
       - name: Fail PR if missing copyright
         if: failure()
