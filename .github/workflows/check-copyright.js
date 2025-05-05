@@ -1,7 +1,6 @@
 const fs = require('fs');
 const { processFile } = require('./process-file');
-
-
+const year = new Date().getFullYear();
 
 // Header block to insert/replace
 const newHeaderBlock = [
