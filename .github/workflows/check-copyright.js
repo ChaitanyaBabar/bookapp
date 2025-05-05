@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { processFile } = require('./process-file');
+const { addMissingCopyRight } = require('./add-missing-copyright');
 const year = new Date().getFullYear();
 
 // Header block to insert/replace
@@ -26,7 +26,7 @@ const changedFiles = fs.readFileSync(changedFilesPath, 'utf-8')
 let missing = [];
 
 changedFiles.forEach((filePath) => {
-  if(processFile(filePath, targetExts, newHeaderBlock)){
+  if(addMissingCopyRight(filePath, targetExts, newHeaderBlock)){
     console.warn(`Missing copyright in: ${filePath}`);
     missing.push(filePath);
   }
