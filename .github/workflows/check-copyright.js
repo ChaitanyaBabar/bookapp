@@ -1,21 +1,43 @@
 const fs = require('fs');
-const glob = require('glob');
+const { processFile } = require('./process-file');
 
-const files = glob.sync('server/**/*.js');
+
+
+// Header block to insert/replace
+const newHeaderBlock = [
+  '/**',
+  ` * Copyright (c) ${year} Chaitanya Babar`,
+  ' * Licensed under the MIT License. See LICENSE file in the project root for full license information. ',
+  ' */',
+  '',
+];
+const targetExts = ['.js', '.ts']; // Add the targetExts.
+
+
+const changedFilesPath = process.argv[2];
+if (!changedFilesPath || !fs.existsSync(changedFilesPath)) {
+  console.error('Changed files list not found.');
+  process.exit(0);
+}
+
+const changedFiles = fs.readFileSync(changedFilesPath, 'utf-8')
+  .split('\n')
+  .map(f => f.trim())
+  .filter(f => f && (f.endsWith('.ts') || f.endsWith('.js')) && fs.existsSync(f));
+
 let missing = [];
 
-files.forEach(file => {
-  const content = fs.readFileSync(file, 'utf8');
-  if (!content.includes('Copyright (c)')) {
+changedFiles.forEach((filePath) => {
+  if(processFile(filePath, targetExts, newHeaderBlock)){
+    console.warn(`Missing copyright in: ${file}`);
     missing.push(file);
   }
 });
 
+
 if (missing.length > 0) {
-  console.log(`❌ Missing copyright in: ${missing.join(', ')}`);
-  // Expose output to GitHub Actions
-  console.log(`::set-output name=copyright_missing::true`);
+  console.error(`❌ Found ${missing.length} files without copyright headers.`);
+  process.exit(1);
 } else {
-  console.log('✅ All files have copyright headers');
-  console.log(`::set-output name=copyright_missing::false`);
+  console.log(`✅ All checked files have copyright headers.`);
 }
