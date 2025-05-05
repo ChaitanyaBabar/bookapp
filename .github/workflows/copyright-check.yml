@@ -54,4 +54,4 @@ jobs:
           body: |
             This PR automatically adds or updates missing copyright headers in changed files.
           branch: fix/copyright-${{ github.run_id }}
-          base: ${{ github.event.pull_request.base.ref }}
+          base: ${{ github.event.pull_request.head.ref }}
