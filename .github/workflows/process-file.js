@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 
 function processFile(filePath, targetExts, newHeaderBlock) {
+    let copyrightAdded = false;
+
     const ext = path.extname(filePath);
     if (!targetExts.includes(ext)) return;
   
@@ -43,13 +45,16 @@ function processFile(filePath, targetExts, newHeaderBlock) {
       // Replace existing block
       lines.splice(startIdx, endIdx - startIdx + 1, ...newHeaderBlock);
       console.log(`🔁 Updated copyright in: ${filePath}`);
+      copyrightAdded = true;
     } else {
       // Add at top
       lines.unshift(...newHeaderBlock);
       console.log(`➕ Added copyright in: ${filePath}`);
+      copyrightAdded = true;
     }
   
     fs.writeFileSync(filePath, lines.join('\n'), 'utf8');
+    return copyrightAdded;
 }
 
 
