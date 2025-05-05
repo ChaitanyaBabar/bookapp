@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 Chaitanya Babar
+ * Licensed under the MIT License. See LICENSE file in the project root for full license information. 
+ */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
