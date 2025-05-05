@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-function processFile(filePath, targetExts, newHeaderBlock) {
+function addUpdateCopyRight(filePath, targetExts, newHeaderBlock) {
     let copyrightAdded = false;
 
     const ext = path.extname(filePath);
@@ -58,4 +58,4 @@ function processFile(filePath, targetExts, newHeaderBlock) {
 }
 
 
-module.exports = { processFile };
+module.exports = { addUpdateCopyRight };
