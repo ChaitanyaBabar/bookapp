@@ -1,6 +1,6 @@
 
 const glob = require('glob');
-const { processFile } = require('./process-file');
+const { addUpdateCopyRight } = require('./add-update-copyright');
 
 const targetDir = 'server/backend';
 const targetExts = ['.js', '.ts']; // Add the targetExts.
@@ -21,5 +21,5 @@ const newHeaderBlock = [
 const files = glob.sync(`${targetDir}/**/*`, { nodir: true });
 
 files.forEach((filePath) => {
-  processFile(filePath, targetExts, newHeaderBlock);
+  addUpdateCopyRight(filePath, targetExts, newHeaderBlock);
 });
