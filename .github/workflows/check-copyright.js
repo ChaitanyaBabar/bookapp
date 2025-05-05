@@ -28,8 +28,8 @@ let missing = [];
 
 changedFiles.forEach((filePath) => {
   if(processFile(filePath, targetExts, newHeaderBlock)){
-    console.warn(`Missing copyright in: ${file}`);
-    missing.push(file);
+    console.warn(`Missing copyright in: ${filePath}`);
+    missing.push(filePath);
   }
 });
 
