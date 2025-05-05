@@ -1,1 +1,1 @@
-server/src/app/app.module.ts
+server/src/app/user/user.module.ts
