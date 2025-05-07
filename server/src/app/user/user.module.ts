@@ -29,6 +29,9 @@ export class UserModule {
    * for check-copyright.yml make the PR to fail.
    * 
    * Should not raise a copyright PR, for this change.
+   * 
+   * This file should be excluded from the check-copyright.yml as it already has
+   * copyright header.
    */
 
 }
