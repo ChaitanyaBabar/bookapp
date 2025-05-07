@@ -1,2 +1,2 @@
+server/src/app/user/user-list/user-list.component.ts
 server/src/app/user/user-routing.module.ts
-server/src/app/user/user.module.ts
