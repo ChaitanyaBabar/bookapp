@@ -20,6 +20,9 @@ export class UserRoutingModule {
    * for rasing a PR , containing the file that does not
    * have copy-right headers and hence Github Actions
    * for check-copyright.yml make the PR to fail.
+   * 
+   * This file should be excluded from the check-copyright.yml as it already has
+   * copyright header.
    */
 
 
