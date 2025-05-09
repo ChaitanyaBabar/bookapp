@@ -11,7 +11,7 @@ const year = new Date().getFullYear();
 const newHeaderBlock = [
   '/**',
   ` * Copyright (c) ${year} Chaitanya Babar`,
-  ' * Licensed under the MIT License. See LICENSE file in the project root for full license information. ',
+  ' * Licensed under the MIT License. See LICENSE file in the project root for full license information. (cbabar) Updated Copyright 1 ',
   ' */',
   '',
 ];
