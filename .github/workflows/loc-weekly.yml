@@ -1,9 +1,15 @@
 name: Weekly LOC Count
 
 on:
+  workflow_dispatch: # Allow manual trigger too
+    inputs:
+      branch:
+        description: 'Branch to analyze'
+        required: false
+        default: 'master'
+
   schedule:
     - cron: '0 0 * * 1' # Every Monday at midnight
-  workflow_dispatch: # Allow manual trigger too
 
 jobs:
   loc-count:
@@ -13,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Needed to access commit history
-          ref: master
+          ref: ${{ github.event.inputs.branch | 'master' }}
 
       - name: Count lines changed in last 7 days
         run: |
