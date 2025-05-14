@@ -7,6 +7,10 @@ on:
         description: 'Branch to analyze'
         required: false
         default: 'master'
+      days:
+        description: 'Number of past days to include'
+        required: false
+        default: '7'
 
   schedule:
     - cron: '0 0 * * 1'  # Runs every Monday at midnight
@@ -21,19 +25,23 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.inputs.branch || 'master' }}
 
-      - name: Show commits from the last 7 days
+      - name: Show commits from the past N days
         run: |
-          echo "Analyzing branch: ${{ github.event.inputs.branch || 'master' }}"
-          git log --since="7 days ago" --pretty=oneline
+          BRANCH=${{ github.event.inputs.branch || 'master' }}
+          DAYS=${{ github.event.inputs.days || 7 }}
+          echo "Analyzing branch: $BRANCH"
+          echo "Time range: last $DAYS days"
+          git log --since="$DAYS days ago" --pretty=oneline
 
-      - name: Show lines of code added/removed in last 7 days
+      - name: Show lines of code added/removed in past N days
         run: |
-          OLDEST_COMMIT=$(git log --since="7 days ago" --format="%H" | tail -1)
+          DAYS=${{ github.event.inputs.days || 7 }}
+          OLDEST_COMMIT=$(git log --since="$DAYS days ago" --format="%H" | tail -1)
           if [ -z "$OLDEST_COMMIT" ]; then
-            echo "No commits found in the past 7 days."
+            echo "No commits found in the past $DAYS days."
           else
             echo "Changes from commit $OLDEST_COMMIT to HEAD:"
             git diff --shortstat $OLDEST_COMMIT..HEAD | tee loc-summary.txt
-            echo "### LOC changes for the past 7 days" >> $GITHUB_STEP_SUMMARY
+            echo "### LOC changes for the past $DAYS days" >> $GITHUB_STEP_SUMMARY
             cat loc-summary.txt >> $GITHUB_STEP_SUMMARY
           fi
