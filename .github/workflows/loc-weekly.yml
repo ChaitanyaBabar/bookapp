@@ -41,7 +41,7 @@ jobs:
           if [ -z "$OLDEST_COMMIT" ]; then
             echo "No commits found in the past $DAYS days." | tee -a loc-summary.txt
           else
-            echo "Changes from commit $OLDEST_COMMIT to HEAD:" | tee -a loc-summary.txt
+            echo "Changes from commit $OLDEST_COMMIT to HEAD:"
             git diff --shortstat $OLDEST_COMMIT..HEAD | tee -a loc-summary.txt
           fi
           cat loc-summary.txt >> $GITHUB_STEP_SUMMARY
