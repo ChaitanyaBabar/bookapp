@@ -1,0 +1,36 @@
+name: Print Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to generate release notes from'
+        required: false
+        default: 'main'
+
+jobs:
+  generate-release-notes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch || 'main' }}
+
+      - name: Generate release notes from commit history
+        run: |
+          BRANCH="${{ github.event.inputs.branch || 'main' }}"
+          echo "Generating release notes for branch: $BRANCH"
+
+          NOTES=$(git log --pretty=format:"- %s (%an)" $(git merge-base origin/$BRANCH HEAD)..HEAD)
+
+          if [ -z "$NOTES" ]; then
+            echo "No new commits found to generate release notes."
+            echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
+            echo "_No new changes detected._" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
+            echo "$NOTES" >> $GITHUB_STEP_SUMMARY
+          fi
