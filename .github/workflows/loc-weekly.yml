@@ -1,0 +1,31 @@
+name: Weekly LOC Count
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # Every Monday at midnight
+  workflow_dispatch: # Allow manual trigger too
+
+jobs:
+  loc-count:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the target branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Needed to access commit history
+          ref: master
+
+      - name: Count lines changed in last 7 days
+        run: |
+          echo "Commits in last 7 days on branch $(git rev-parse --abbrev-ref HEAD):"
+          git log --since="7 days ago" --pretty=oneline
+
+          echo ""
+          echo "Line changes in last 7 days:"
+          git diff --shortstat $(git log --since="7 days ago" --format="%H" | tail -1)..HEAD
+
+      - name: Post summary to GitHub Actions
+        run: |
+          git diff --shortstat $(git log --since="7 days ago" --format="%H" | tail -1)..HEAD > loc-summary.txt
+          echo "### Lines of Code Changed This Week" >> $GITHUB_STEP_SUMMARY
+          cat loc-summary.txt >> $GITHUB_STEP_SUMMARY
