@@ -2,7 +2,10 @@ name: Print Release Notes
 
 on:
   workflow_dispatch:  # This allows manual triggering with branch selection from a dropdown
-    # No need to define any inputs here, since user will select the branch when running the action.
+    inputs:
+      branch:
+        description: 'Branch to generate release notes from'
+        required: true  # The user must select a branch
 
 jobs:
   generate-release-notes:
@@ -13,14 +16,21 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.head_ref || 'master' }}  # This uses the branch selected when triggering the action or defaults to 'master'
+          ref: ${{ github.event.inputs.branch }}  # Use the branch selected when triggering the action
+
+      - name: Print the selected branch
+        run: |
+          echo "Selected branch: ${{ github.event.inputs.branch }}"  # Print the selected branch
 
       - name: Generate release notes from commit history
         run: |
-          BRANCH="${{ github.head_ref || 'master' }}"  # Get the branch that triggered the action, defaulting to 'master'
-          BASE_BRANCH="master"  # Default base branch
+          BRANCH="${{ github.event.inputs.branch }}"
+          BASE_BRANCH="master"  # Default base branch is 'master'
 
           echo "Generating release notes for branch: $BRANCH"
+
+          # Print the value of github.head_ref to see what it refers to
+          echo "github.head_ref: ${{ github.head_ref }}"  # Print github.head_ref
 
           # Find the common ancestor between the input branch and the base branch (master)
           MERGE_BASE=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
