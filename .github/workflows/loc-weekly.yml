@@ -1,7 +1,7 @@
 name: Weekly LOC Count
 
 on:
-  workflow_dispatch: # Allow manual trigger too
+  workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to analyze'
@@ -9,29 +9,31 @@ on:
         default: 'master'
 
   schedule:
-    - cron: '0 0 * * 1' # Every Monday at midnight
+    - cron: '0 0 * * 1'  # Runs every Monday at midnight
 
 jobs:
   loc-count:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the target branch
+      - name: Checkout the specified branch
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Needed to access commit history
-          ref: ${{ github.event.inputs.branch | 'master' }}
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch || 'master' }}
 
-      - name: Count lines changed in last 7 days
+      - name: Show commits from the last 7 days
         run: |
-          echo "Commits in last 7 days on branch $(git rev-parse --abbrev-ref HEAD):"
+          echo "Analyzing branch: ${{ github.event.inputs.branch || 'master' }}"
           git log --since="7 days ago" --pretty=oneline
 
-          echo ""
-          echo "Line changes in last 7 days:"
-          git diff --shortstat $(git log --since="7 days ago" --format="%H" | tail -1)..HEAD
-
-      - name: Post summary to GitHub Actions
+      - name: Show lines of code added/removed in last 7 days
         run: |
-          git diff --shortstat $(git log --since="7 days ago" --format="%H" | tail -1)..HEAD > loc-summary.txt
-          echo "### Lines of Code Changed This Week" >> $GITHUB_STEP_SUMMARY
-          cat loc-summary.txt >> $GITHUB_STEP_SUMMARY
+          OLDEST_COMMIT=$(git log --since="7 days ago" --format="%H" | tail -1)
+          if [ -z "$OLDEST_COMMIT" ]; then
+            echo "No commits found in the past 7 days."
+          else
+            echo "Changes from commit $OLDEST_COMMIT to HEAD:"
+            git diff --shortstat $OLDEST_COMMIT..HEAD | tee loc-summary.txt
+            echo "### LOC changes for the past 7 days" >> $GITHUB_STEP_SUMMARY
+            cat loc-summary.txt >> $GITHUB_STEP_SUMMARY
+          fi
