@@ -39,7 +39,7 @@ jobs:
           fi
 
           # Get the commits between the base branch and the input branch
-          NOTES=$(git log --pretty=format:"- %s (%an)" $MERGE_BASE..origin/$BRANCH)
+          NOTES=$(git log --pretty=format:"- %s (%an)" $MERGE_BASE..origin/$BASE_BRANCH)
 
           if [ -z "$NOTES" ]; then
             echo "No new commits found to generate release notes."
