@@ -28,15 +28,15 @@ jobs:
           BRANCH="${{ github.event.inputs.branch || 'master' }}"
           BASE_BRANCH="master"
           REPO_URL="https://github.com/ChaitanyaBabar/bookapp"
-
+      
           echo "Generating clean release notes for branch: $BRANCH"
           git fetch origin
-
+      
           NOTES=$(git log --no-merges --cherry-pick --right-only \
-            --pretty=format:"- %s ([%%h]($REPO_URL/commit/%%H)) (%%an, %%ad)" \
+            --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" \
             --date=short \
             origin/$BASE_BRANCH...origin/$BRANCH)
-
+      
           if [ -z "$NOTES" ]; then
             echo "No unique commits found to generate release notes."
             echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
