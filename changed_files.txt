@@ -1,2 +1,1 @@
-server/src/app/user/user-edit/user-edit.component.ts
-server/src/app/user/user-list/user-list.component.ts
+server/server.js
