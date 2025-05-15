@@ -23,5 +23,3 @@ const files = glob.sync(`${targetDir}/**/*`, { nodir: true });
 files.forEach((filePath) => {
   addUpdateCopyRight(filePath, targetExts, newHeaderBlock);
 });
-
-// TODO : This line can be deleted. Dummy unrelated change in master Batch 2
