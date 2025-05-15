@@ -23,26 +23,19 @@ jobs:
         run: |
           echo "Selected branch: ${{ github.event.inputs.branch || 'master' }}"  # Print the selected branch
 
-      - name: Generate release notes from commit history
+      - name: Generate clean release notes from commit history
         run: |
-          BRANCH="${{ github.event.inputs.branch || 'master' }}"  # Get the branch from the input or default to 'master'
-          BASE_BRANCH="master"  # Default base branch
+          BRANCH="${{ github.event.inputs.branch || 'master' }}"  # Input or default branch
+          BASE_BRANCH="master"
 
-          echo "Generating release notes for branch: $BRANCH"
+          echo "Generating clean release notes for branch: $BRANCH"
 
-          # Find the common ancestor between the input branch and the base branch (master)
-          MERGE_BASE=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
+          git fetch origin
 
-          if [ -z "$MERGE_BASE" ]; then
-            echo "No common ancestor found between $BASE_BRANCH and $BRANCH."
-            exit 1
-          fi
-
-          # Get the commits between the base branch and the input branch
-          NOTES=$(git log --pretty=format:"- %s (%an)" $MERGE_BASE..origin/$BASE_BRANCH)
+          NOTES=$(git log --no-merges --cherry-pick --right-only --pretty=format:"- %s (%an)" origin/$BASE_BRANCH...origin/$BRANCH)
 
           if [ -z "$NOTES" ]; then
-            echo "No new commits found to generate release notes."
+            echo "No unique commits found to generate release notes."
             echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
             echo "_No new changes detected._" >> $GITHUB_STEP_SUMMARY
           else
