@@ -58,9 +58,13 @@ jobs:
 
       - name: Commit updated release tracking file
         run: |
+          BRANCH="${{ github.event.inputs.branch }}"
+      
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
+      
           git add .last_release_commit
-          git commit -m "Update last release commit for $BRANCH"
+          git diff --cached --quiet || git commit -m "Update last release commit for $BRANCH"
+      
           git push origin HEAD:$BRANCH
+
