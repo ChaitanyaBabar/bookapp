@@ -43,7 +43,7 @@ jobs:
           fi
 
           # Generate release notes
-          NOTES=$(git log --no-merges --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" --date=short $BASE_COMMIT..origin/$BRANCH)
+          NOTES=$(git log --no-merges --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" --date=short $BASE_COMMIT..origin/$BRANCH | grep -v "Update last release commit")
 
           echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
           if [ -z "$NOTES" ]; then
