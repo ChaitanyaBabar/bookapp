@@ -52,8 +52,9 @@ jobs:
             echo "$NOTES" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # Update tracking file with the latest commit hash
-          LATEST_COMMIT=$(git rev-parse origin/$BRANCH)
+          # Store latest meaningful commit (excluding bot commits)
+          LATEST_COMMIT=$(git log --pretty=format:"%H %s" origin/$BRANCH | grep -v "Update last release commit" | head -n 1 | cut -d' ' -f1)
+
           echo "$LATEST_COMMIT" > $TRACK_FILE
 
       - name: Commit updated release tracking file
