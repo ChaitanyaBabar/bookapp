@@ -21,7 +21,7 @@ jobs:
 
       - name: Print the selected branch
         run: |
-              echo "Selected branch: ${{ github.event.inputs.branch || 'master' }}"
+          echo "Selected branch: ${{ github.event.inputs.branch || 'master' }}"
 
       - name: Generate clean release notes with commit links
         run: |
@@ -29,21 +29,41 @@ jobs:
           BASE_BRANCH="master"
           REPO_URL="https://github.com/ChaitanyaBabar/bookapp"
           TRACK_FILE=".last_release_commit"
+          DELIM="⧫⧫⧫"
 
           echo "Generating release notes for branch: $BRANCH"
           git fetch origin
 
-          # Determine base commit
+          # Initialize base hash
+          BASE_HASH=""
+          BASE_MSG=""
+
+          # Step 1: Try to read the tracked commit hash and message
           if git show origin/$BRANCH:$TRACK_FILE > /dev/null 2>&1; then
-            BASE_COMMIT=$(git show origin/$BRANCH:$TRACK_FILE)
-            echo "Using last release commit hash from $TRACK_FILE: $BASE_COMMIT"
+            TRACK_DATA=$(git show origin/$BRANCH:$TRACK_FILE)
+            BASE_HASH=$(echo "$TRACK_DATA" | cut -d"$DELIM" -f1)
+            BASE_MSG=$(echo "$TRACK_DATA" | cut -d"$DELIM" -f2-)
+
+            # Step 2: Validate if the commit hash still exists (i.e. not lost due to rebase)
+            if git cat-file -e "$BASE_HASH"^{commit} 2>/dev/null; then
+              echo "Using last release commit hash: $BASE_HASH"
+            else
+              echo "Tracked commit hash not found in history. Searching by commit message..."
+              BASE_HASH=$(git log --pretty=format:"%H$DELIM%s" origin/$BRANCH | grep -F "$BASE_MSG" | head -n 1 | cut -d"$DELIM" -f1)
+              if [ -z "$BASE_HASH" ]; then
+                echo "Could not find previous commit by message either. Falling back to merge-base."
+                BASE_HASH=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
+              else
+                echo "Found equivalent commit by message: $BASE_HASH"
+              fi
+            fi
           else
-            BASE_COMMIT=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
-            echo "No previous release hash found. Using merge-base: $BASE_COMMIT"
+            echo "No previous release tracking file found. Using merge-base."
+            BASE_HASH=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
           fi
 
-          # Generate release notes
-          NOTES=$( (git log --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" --date=short "^$BASE_COMMIT" "origin/$BRANCH" | grep -v "Update last release commit") || true )
+          # Step 3: Generate release notes
+          NOTES=$( (git log --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" --date=short "^$BASE_HASH" "origin/$BRANCH" | grep -v "Update last release commit") || true )
 
           echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
           if [ -z "$NOTES" ]; then
@@ -52,20 +72,19 @@ jobs:
             echo "$NOTES" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # Store latest meaningful commit (excluding bot commits)
-          LATEST_COMMIT=$(git log --pretty=format:"%H %s" origin/$BRANCH | grep -v "Update last release commit" | head -n 1 | cut -d' ' -f1)
+          # Step 4: Save latest meaningful commit (excluding the bot message)
+          LATEST=$(git log --pretty=format:"%H$DELIM%s" origin/$BRANCH | grep -v "Update last release commit" | head -n 1)
 
-          echo "$LATEST_COMMIT" > $TRACK_FILE
+          echo "$LATEST" > $TRACK_FILE
 
       - name: Commit updated release tracking file
         run: |
           BRANCH="${{ github.event.inputs.branch }}"
-      
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      
+
           git add .last_release_commit
           git diff --cached --quiet || git commit -m "Update last release commit for $BRANCH"
-      
-          git push origin HEAD:$BRANCH
 
+          git push origin HEAD:$BRANCH
