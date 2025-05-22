@@ -34,36 +34,42 @@ jobs:
           echo "Generating release notes for branch: $BRANCH"
           git fetch origin
 
-          # Initialize base hash
           BASE_HASH=""
           BASE_MSG=""
+          LAST_RELEASE_DATE=""
 
-          # Step 1: Try to read the tracked commit hash and message
+          # Step 1: Try to read the previous commit hash and message
           if git show origin/$BRANCH:$TRACK_FILE > /dev/null 2>&1; then
             TRACK_DATA=$(git show origin/$BRANCH:$TRACK_FILE)
             BASE_HASH=$(echo "$TRACK_DATA" | awk -F"$DELIM" '{print $1}')
             BASE_MSG=$(echo "$TRACK_DATA" | awk -F"$DELIM" '{print substr($0, index($0,$2))}')
-          
-            # Step 2: Validate if the commit hash still exists (i.e. not lost due to rebase)
+
+            # Try to get author date if commit still exists
             if git cat-file -e "$BASE_HASH"^{commit} 2>/dev/null; then
-              echo "Using last release commit hash: $BASE_HASH"
+              LAST_RELEASE_DATE=$(git show -s --format=%aI "$BASE_HASH")
+              echo "Using last release commit date from $BASE_HASH: $LAST_RELEASE_DATE"
             else
-              echo "Tracked commit hash not found in history. Searching by commit message..."
-              BASE_HASH=$(git log --pretty=format:"%H$DELIM%s" origin/$BRANCH | grep -F "$BASE_MSG" | head -n 1 | awk -F"$DELIM" '{print $1}')
-              if [ -z "$BASE_HASH" ]; then
-                echo "Could not find previous commit by message either. Falling back to merge-base."
-                BASE_HASH=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
+              echo "Tracked commit not found. Searching by message: $BASE_MSG"
+              ALT_COMMIT=$(git log --pretty=format:"%H$DELIM%s" origin/$BRANCH | grep -F "$BASE_MSG" | head -n 1 | awk -F"$DELIM" '{print $1}')
+              if [ -n "$ALT_COMMIT" ]; then
+                LAST_RELEASE_DATE=$(git show -s --format=%aI "$ALT_COMMIT")
+                echo "Found matching commit by message. Using date: $LAST_RELEASE_DATE"
               else
-                echo "Found equivalent commit by message: $BASE_HASH"
+                echo "No match found by message. Falling back to merge-base."
+                BASE_HASH=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
+                LAST_RELEASE_DATE=$(git show -s --format=%aI "$BASE_HASH")
+                echo "Using merge-base commit $BASE_HASH with date $LAST_RELEASE_DATE"
               fi
             fi
           else
-            echo "No previous release tracking file found. Using merge-base."
+            echo "No previous tracking file. Using merge-base of $BASE_BRANCH and $BRANCH"
             BASE_HASH=$(git merge-base origin/$BASE_BRANCH origin/$BRANCH)
+            LAST_RELEASE_DATE=$(git show -s --format=%aI "$BASE_HASH")
+            echo "Using merge-base commit $BASE_HASH with date $LAST_RELEASE_DATE"
           fi
 
-          # Step 3: Generate release notes
-          NOTES=$( (git log --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" --date=short "^$BASE_HASH" "origin/$BRANCH" | grep -v "Update last release commit") || true )
+          # Step 2: Generate release notes using --since
+          NOTES=$( (git log origin/$BRANCH --since="$LAST_RELEASE_DATE" --pretty=format:"- %s ([%h]($REPO_URL/commit/%H)) (%an, %ad)" --date=short | grep -v "Update last release commit") || true )
 
           echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
           if [ -z "$NOTES" ]; then
@@ -72,9 +78,8 @@ jobs:
             echo "$NOTES" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # Step 4: Save latest meaningful commit (excluding the bot message)
+          # Step 3: Save latest commit (excluding bot commits)
           LATEST=$(git log --pretty=format:"%H$DELIM%s" origin/$BRANCH | grep -v "Update last release commit" | head -n 1)
-
           echo "$LATEST" > $TRACK_FILE
 
       - name: Commit updated release tracking file
