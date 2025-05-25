@@ -6,6 +6,7 @@
 # Define the template for the release name and tag.
 # $NEXT_PATCH_VERSION will increment the patch number (e.g., v1.0.0 -> v1.0.1)
 # You could also use $NEXT_MINOR_VERSION or $NEXT_MAJOR_VERSION depending on your strategy.
+# MAINTAINENCE NOTE: Added only to commit under chore/branch : CAN BE DELETED after merge from "chore/JIRA-YYYY-ci-maintenance-task-build"
 name-template: 'Release v$NEXT_PATCH_VERSION'
 tag-template: 'v$NEXT_PATCH_VERSION'
 
