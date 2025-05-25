@@ -1,0 +1,33 @@
+# .github/workflows/draft-release.yml
+
+name: Draft Release Notes
+
+# This workflow triggers on pushes to your 'release' branch.
+# Adjust the branch name if yours is different (e.g., 'staging', 'development').
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  draft_new_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # This permission is required for release-drafter to create/update releases
+      pull-requests: write # This permission is required for release-drafter to read PRs and their labels
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # Fetch all history for accurate commit range detection by release-drafter
+        with:
+          fetch-depth: 0
+
+      - name: Draft Release
+        uses: release-drafter/release-drafter@v6 # Use the latest stable version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided token for authentication
+        # The configuration for release-drafter is typically managed in a separate file,
+        # '.github/release-drafter.yml', as shown below.
+        # release-drafter will automatically discover the last published tag
+        # and include all changes (including those rebased from master) since then.
