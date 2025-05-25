@@ -22,3 +22,6 @@ export class AppComponent {
    * for check-copyright.yml make the PR to fail.
    */
 }
+
+
+// Dummy unrelated change in server/src/app/app.components.ts | server-acl | Batch 1
