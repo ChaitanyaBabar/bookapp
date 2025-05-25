@@ -14,6 +14,9 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'angularApp';
 
+  // fix/JIRA-XXXX-issue-fix-1
+  demo_var_added = 'demo_var_added';
+
   /**
    * Demo change in the app.component.ts file
    * to test the GitHub Actions workflow
