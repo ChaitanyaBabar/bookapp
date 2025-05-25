@@ -35,7 +35,7 @@ jobs:
         with:
           # Crucial: Explicitly tell release-drafter which commit/branch the tag should point to.
           # In this case, it should point to the HEAD of the branch that was checked out.
-          target_commitish: ${{ github.event.inputs.branch }}
+          commitish: ${{ github.event.inputs.branch }}
           # The configuration for release-drafter is still in .github/release-drafter.yml
           # No changes needed there, as release-drafter operates on the history of the
           # branch that is currently checked out by the 'actions/checkout' step.
