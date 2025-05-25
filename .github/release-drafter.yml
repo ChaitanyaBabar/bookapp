@@ -1,0 +1,65 @@
+# .github/release-drafter.yml
+
+# Configuration for release-drafter.
+# For a full list of options, see: https://github.com/release-drafter/release-drafter/blob/main/README.md#configuration
+
+# Define the template for the release name and tag.
+# $NEXT_PATCH_VERSION will increment the patch number (e.g., v1.0.0 -> v1.0.1)
+# You could also use $NEXT_MINOR_VERSION or $NEXT_MAJOR_VERSION depending on your strategy.
+name-template: 'Release v$NEXT_PATCH_VERSION'
+tag-template: 'v$NEXT_PATCH_VERSION'
+
+# Define categories for your release notes based on labels applied to Pull Requests.
+# PRs with these labels will be grouped under the specified title.
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'bug'
+      - 'fix'
+  - title: '🛠️ Improvements & Refactoring'
+    labels:
+      - 'improvement'
+      - 'refactor'
+      - 'perf' # performance
+  - title: '📝 Documentation'
+    labels:
+      - 'documentation'
+  - title: '📦 Dependency Updates'
+    labels:
+      - 'dependencies'
+      - 'deps'
+  - title: '🚨 Breaking Changes'
+    labels:
+      - 'breaking-change' # Use this label for any breaking changes!
+
+# Exclude pull requests with these labels from appearing in the release notes.
+# This is useful for internal chores, CI/CD adjustments, etc.
+exclude-labels:
+  - 'chore'
+  - 'skip-changelog' # Custom label to explicitly exclude a PR
+  - 'duplicate'
+  - 'invalid'
+  - 'wontfix'
+  - 'question'
+  - 'design'
+
+# Define the template for the release notes content itself.
+# These placeholders will be replaced by release-drafter:
+# $CHANGES: The categorized list of merged PRs.
+# $CONTRIBUTORS: A list of contributors to the release.
+template: |
+  ## What's Changed
+
+  $CHANGES
+
+  ---
+
+  ## Contributors
+
+  $CONTRIBUTORS
+
+  Huge thanks to everyone who contributed to this release!
