@@ -42,3 +42,5 @@ jobs:
             echo "### Release Notes for \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
             echo "$NOTES" >> $GITHUB_STEP_SUMMARY
           fi
+
+      # Dummy unrelated change in .github/workflows/release.yml | server-acl | Batch 1
