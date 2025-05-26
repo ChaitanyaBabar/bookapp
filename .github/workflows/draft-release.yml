@@ -39,3 +39,12 @@ jobs:
           # The configuration for release-drafter is still in .github/release-drafter.yml
           # No changes needed there, as release-drafter operates on the history of the
           # branch that is currently checked out by the 'actions/checkout' step.
+
+
+          # OPTIONAL: Define a fallback tag if no prior releases are found on the branch.
+          # This ensures that for the *very first* release on a new branch, it starts from a known point.
+          # Without a fallback-tag, it might compare against master's history or miss changes.
+          # If 'v0.0.0' or 'v0.0.1' existed before server-acl was created, this might be the issue.
+          fallback-tag: 'v0.0.0' # Example: Start from the very beginning if no tag found.
+          # You might need to make sure 'v0.0.0' exists as an actual tag in your repo,
+          # or use a commit hash from very early in your repo's history.
