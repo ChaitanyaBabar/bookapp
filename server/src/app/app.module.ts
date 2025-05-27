@@ -80,7 +80,7 @@ export class AppModule {
 // Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 3
 // Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 4
 // Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 5
-// Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 6
+// Dummy unrelated change in server/src/app/app.module.ts | server-acl | Batch 6
 // Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 7
 // Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 8
 // Dummy unrelated change in server/src/app/app.moudle.ts | server-acl | Batch 9
