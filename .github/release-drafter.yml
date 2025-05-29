@@ -63,3 +63,15 @@ template: |
   $CONTRIBUTORS
 
   Huge thanks to everyone who contributed to this release!
+
+# --- NEW SECTION: Define Replacers for Jira Links ---
+# This tells release-drafter to find patterns and replace them with links.
+replacers:
+  - search: '/(ACE-\d+)/g' # Regex to find "JIRA-" followed by digits (e.g., JIRA-1234)
+    replace: '[$1](https://jira.tibco.com/browse/$1)'
+    # IMPORTANT: Replace 'https://your-jira-instance.atlassian.net/browse' with your actual Jira base URL.
+    # For example, if your Jira project is at 'https://company.atlassian.net/browse/PROJECTNAME',
+    # then your URL would be 'https://company.atlassian.net/browse/'
+
+  # You can add more replacers if you have other patterns you want to link.
+  # For example, if you use a different issue tracker ID format.
