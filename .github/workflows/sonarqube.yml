@@ -73,5 +73,6 @@ jobs:
             -Dsonar.projectKey=ChaitanyaBabar_bookapp \
             -Dsonar.sources=. \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.organization=chaitanyababar
 
