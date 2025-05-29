@@ -41,6 +41,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17 (required for SonarQube Scanner to run)
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+    
       - name: Analyze with SonarQube
 
         # You can pin the exact commit or the version.
