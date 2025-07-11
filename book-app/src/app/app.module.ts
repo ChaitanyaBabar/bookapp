@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 Chaitanya Babar
+ * Licensed under the MIT License. See LICENSE file in the project root for full license information. 
+ */
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -68,3 +72,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
+// Dummy Angular upgrade commit - batch 1
+// Dummy Angular upgrade commit - batch 2
